@@ -1,22 +1,5 @@
 'use strict';
 
-
-var getRandomMinMax = function (min, max) {
-  return Math.floor(Math.random() * (max - min) + min);
-};
-
-var getRandomItem = function (arr) {
-  return Math.floor(Math.random() * arr.length);
-};
-
-var getAvatars = function (count) {
-  var avatars = [];
-  for (var i = 0; i < count; i++) {
-    avatars.push(i < 8 ? ('img/avatars/user0' + (i + 1) + '.png') : ('img/avatars/default.png'));
-  }
-  return avatars;
-};
-
 var COUNT_ADVERTISEMENTS = 8;
 
 var Advertisement = {
@@ -40,8 +23,8 @@ var Advertisement = {
   },
   LOCATION: {
     X: {
-      MIN: 0,
-      MAX: 1200
+      MIN: 40,
+      MAX: 1160
     },
     Y: {
       MIN: 130,
@@ -50,7 +33,24 @@ var Advertisement = {
   }
 };
 
-var createRandomAdvertisement = function () {
+function getRandomMinMax(min, max) {
+  return Math.floor(Math.random() * (max - min) + min);
+}
+
+function getRandomItem(arr) {
+  return Math.floor(Math.random() * arr.length);
+}
+
+function getAvatars(count) {
+  var avatars = [];
+  for (var i = 0; i < count; i++) {
+    avatars.push(i < 8 ? ('img/avatars/user0' + (i + 1) + '.png') : ('img/avatars/default.png'));
+  }
+  return avatars;
+}
+
+
+function createRandomAdvertisement() {
   var location = [getRandomMinMax(Advertisement.LOCATION.X.MIN, Advertisement.LOCATION.X.MAX), getRandomMinMax(Advertisement.LOCATION.Y.MIN, Advertisement.LOCATION.Y.MAX)];
 
   var advert = {
@@ -77,12 +77,32 @@ var createRandomAdvertisement = function () {
   };
 
   return advert;
-};
+}
 
-var createAdvertisementList = function (count) {
+function createAdvertisementList(count) {
   var list = [];
   for (var i = 0; i < count; i++) {
     list.push(createRandomAdvertisement());
   }
   return list;
-};
+}
+
+var advertisementItems = createAdvertisementList(COUNT_ADVERTISEMENTS);
+
+var map = document.querySelector('.map');
+map.classList.remove('map--faded');
+
+var templatePin = document.querySelector('#pin').content.querySelector('.map__pin');
+function makePin(advert) {
+  var advertPin = templatePin.cloneNode(true);
+  advertPin.style = 'left: ' + advert.location.x + 'px; top: ' + advert.location.y + 'px;';
+  advertPin.querySelector('img').src = advert.author.avatar;
+  advertPin.querySelector('img').alt = advert.offer.title;
+  return advertPin;
+}
+
+var fragment = document.createDocumentFragment();
+for (var i = 0; i < COUNT_ADVERTISEMENTS; i++) {
+  fragment.appendChild(makePin(advertisementItems[i]));
+}
+map.querySelector('.map__pins').appendChild(fragment);
