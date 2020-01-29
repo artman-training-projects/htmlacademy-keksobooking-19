@@ -16,20 +16,30 @@ var Type = {
   BUNGALO: 'Бунгало'
 };
 
-// var FEATURES = {
-//   WIFI: 'Wi-Fi',
-//   DISHWASHER: 'посудомоечная машина',
-//   PARKING: 'паркинг',
-//   WASHER: 'стиральная машина',
-//   ELEVATOR: 'лифт',
-//   CONDITIONER: 'Кондиционер'
+var Rooms = {
+  MIN: 1,
+  MAX: 4
+};
+
+var Guests = {
+  MIN: 1,
+  MAX: 4
+};
+
+var Features = {
+  WIFI: 'Wi-Fi',
+  DISHWASHER: 'посудомоечная машина',
+  PARKING: 'паркинг',
+  WASHER: 'стиральная машина',
+  ELEVATOR: 'лифт',
+  CONDITIONER: 'Кондиционер'
+};
 
 var Price = {
   MIN: 100,
   MAX: 1000
 };
 
-var FEATURES = ['wifi', 'dishwasher', 'parking', 'washer', 'elevator', 'conditioner'];
 var PHOTOS = ['http://o0.github.io/assets/images/tokyo/hotel1.jpg', 'http://o0.github.io/assets/images/tokyo/hotel2.jpg', 'http://o0.github.io/assets/images/tokyo/hotel3.jpg'];
 var CHECK_TIME = ['12:00', '13:00', '14:00'];
 
@@ -53,34 +63,30 @@ function getRandomElementsFromArray(array, n) {
   return newArray;
 }
 
-function getRandomLocation(xMin, xMax, yMin, yMax) {
-  var location = {};
-  location.x = getRandomMinMax(xMin, xMax);
-  location.y = getRandomMinMax(yMin, yMax);
-  return location;
-}
-
 function createRandomAdvertisement(i) {
-  var location = getRandomLocation(Сoordinates.X_MIN, Сoordinates.X_MAX, Сoordinates.Y_MIN, Сoordinates.Y_MAX);
-  var types = Object.values(Type);
-  var type = types[getRandomIndexFromArray(types)];
+  var location = {
+    x: getRandomMinMax(Сoordinates.X_MIN, Сoordinates.X_MAX),
+    y: getRandomMinMax(Сoordinates.Y_MIN, Сoordinates.Y_MAX)
+  };
   var price = getRandomMinMax(Price.MIN, Price.MAX);
+  var type = Object.keys(Type)[getRandomIndexFromArray(Object.keys(Type))];
+  var features = Object.keys(Features);
 
   var advert = {
     author: {
-      avatar: 'img/avatars/user0' + i + '.png',
+      avatar: i <= 8 ? 'img/avatars/user0' + i + '.png' : 'img/avatars/default.png',
     },
     offer: {
-      title: 'Сдаю ' + type,
+      title: 'Сдаю ' + Type[type],
       address: location.x + ', ' + location.y,
       price: price,
-      type: type,
-      rooms: getRandomMinMax(1, 4),
-      guests: getRandomMinMax(1, 4),
+      type: type.toLowerCase(),
+      rooms: getRandomMinMax(Rooms.MIN, Rooms.MAX),
+      guests: getRandomMinMax(Guests.MIN, Guests.MAX),
       checkin: 'Заезд после ' + CHECK_TIME[getRandomIndexFromArray(CHECK_TIME)],
       checkout: 'выезд до ' + CHECK_TIME[getRandomIndexFromArray(CHECK_TIME)],
-      features: getRandomElementsFromArray(FEATURES, getRandomIndexFromArray(FEATURES)),
-      description: type + ' за ' + price + ' ₽/ночь отличный вариант',
+      features: getRandomElementsFromArray(features, getRandomIndexFromArray(features)),
+      description: Type[type] + ' за ' + price + ' ₽/ночь отличный вариант',
       photos: PHOTOS
     },
     location: location
