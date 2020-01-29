@@ -70,7 +70,11 @@ function createRandomAdvertisement(i) {
   };
   var price = getRandomMinMax(Price.MIN, Price.MAX);
   var type = Object.keys(Type)[getRandomIndexFromArray(Object.keys(Type))];
-  var features = Object.keys(Features);
+  var features = getRandomElementsFromArray(Object.keys(Features), getRandomIndexFromArray(Object.keys(Features)));
+  features.forEach(function (feature, index) {
+    var temp = feature.toLowerCase();
+    features[index] = temp;
+  });
 
   var advert = {
     author: {
@@ -85,7 +89,7 @@ function createRandomAdvertisement(i) {
       guests: getRandomMinMax(Guests.MIN, Guests.MAX),
       checkin: 'Заезд после ' + CHECK_TIME[getRandomIndexFromArray(CHECK_TIME)],
       checkout: 'выезд до ' + CHECK_TIME[getRandomIndexFromArray(CHECK_TIME)],
-      features: getRandomElementsFromArray(features, getRandomIndexFromArray(features)),
+      features: features,
       description: Type[type] + ' за ' + price + ' ₽/ночь отличный вариант',
       photos: PHOTOS
     },
@@ -95,28 +99,14 @@ function createRandomAdvertisement(i) {
   return advert;
 }
 
-console.log(createRandomAdvertisement(1));
-
-/**
-
-function getAvatars(count) {
-  var avatars = [];
+function createAdvertisementArray(count) {
+  var advertisementArray = [];
   for (var i = 0; i < count; i++) {
-    avatars.push(i < 8 ? ('img/avatars/user0' + (i + 1) + '.png') : ('img/avatars/default.png'));
+    advertisementArray.push(createRandomAdvertisement(i + 1));
   }
-  return avatars;
+  return advertisementArray;
 }
-
-
-function createAdvertisementList(count) {
-  var list = [];
-  for (var i = 0; i < count; i++) {
-    list.push(createRandomAdvertisement());
-  }
-  return list;
-}
-
-var advertisementItems = createAdvertisementList(COUNT_ADVERTISEMENTS);
+var advertisements = createAdvertisementArray(COUNT_ADVERTISEMENTS);
 
 var map = document.querySelector('.map');
 map.classList.remove('map--faded');
@@ -124,16 +114,18 @@ map.classList.remove('map--faded');
 var templatePin = document.querySelector('#pin').content.querySelector('.map__pin');
 function makePin(advert) {
   var advertPin = templatePin.cloneNode(true);
-  advertPin.style = 'left: ' + advert.location.x + 'px; top: ' + advert.location.y + 'px;';
+  advertPin.style = 'left: ' + (advert.location.x - 25) + 'px; top: ' + (advert.location.y - 70) + 'px;';
   advertPin.querySelector('img').src = advert.author.avatar;
   advertPin.querySelector('img').alt = advert.offer.title;
   return advertPin;
 }
 
-var fragment = document.createDocumentFragment();
-for (var i = 0; i < COUNT_ADVERTISEMENTS; i++) {
-  fragment.appendChild(makePin(advertisementItems[i]));
+function renderPins(advert) {
+  var fragment = document.createDocumentFragment();
+  advert.forEach(function (item) {
+    fragment.appendChild(makePin(item));
+  });
+  map.querySelector('.map__pins').appendChild(fragment);
 }
-map.querySelector('.map__pins').appendChild(fragment);
 
-*/
+renderPins(advertisements);
