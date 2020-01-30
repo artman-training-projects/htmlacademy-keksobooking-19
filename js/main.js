@@ -84,18 +84,17 @@ function createRandomAdvertisement(i) {
       title: 'Сдаю ' + Type[type],
       address: location.x + ', ' + location.y,
       price: price,
-      type: type.toLowerCase(),
+      type: type,
       rooms: getRandomMinMax(Rooms.MIN, Rooms.MAX),
       guests: getRandomMinMax(Guests.MIN, Guests.MAX),
-      checkin: 'Заезд после ' + CHECK_TIME[getRandomIndexFromArray(CHECK_TIME)],
-      checkout: 'выезд до ' + CHECK_TIME[getRandomIndexFromArray(CHECK_TIME)],
+      checkin: CHECK_TIME[getRandomIndexFromArray(CHECK_TIME)],
+      checkout: CHECK_TIME[getRandomIndexFromArray(CHECK_TIME)],
       features: features,
-      description: Type[type] + ' за ' + price + ' ₽/ночь отличный вариант',
+      description: Type[type] + ' за ' + price + '₽/ночь отличный вариант',
       photos: PHOTOS
     },
     location: location
   };
-
   return advert;
 }
 
@@ -120,12 +119,48 @@ function makePin(advert) {
   return advertPin;
 }
 
-function renderPins(advert) {
+function renderPins(pin) {
   var fragment = document.createDocumentFragment();
-  advert.forEach(function (item) {
+  pin.forEach(function (item) {
     fragment.appendChild(makePin(item));
   });
   map.querySelector('.map__pins').appendChild(fragment);
 }
 
 renderPins(advertisements);
+
+var templateCard = document.querySelector('#card').content.querySelector('.map__card');
+function makeCard(advert) {
+  var advertCard = templateCard.cloneNode(true);
+  advertCard.querySelector('.popup__title').textContent = advert.offer.title;
+  advertCard.querySelector('.popup__text--address').textContent = advert.offer.address;
+  advertCard.querySelector('.popup__text--price').textContent = advert.offer.price + '₽/ночь';
+  advertCard.querySelector('.popup__type').textContent = Type[advert.offer.type];
+  advertCard.querySelector('.popup__text--capacity').textContent = advert.offer.rooms + ' комнаты для ' + advert.offer.guests + ' гостей';
+  advertCard.querySelector('.popup__text--time').textContent = 'Заезд после ' + advert.offer.checkin + ', выезд до ' + advert.offer.checkout;
+  advertCard.querySelector('.popup__features').querySelectorAll('.popup__feature').textContent = advert.offer.feature;
+  advertCard.querySelector('.popup__description').textContent = advert.offer.description;
+
+  var popupPhotos = advertCard.querySelector('.popup__photos');
+  var popupPhoto = popupPhotos.querySelector('.popup__photo');
+  var photos = advert.offer.photos;
+  for (var i = 0; i < advert.offer.photos.length; i++) {
+    var img = popupPhoto.cloneNode(false);
+    img.src = photos[i];
+    popupPhotos.appendChild(img);
+  }
+  popupPhoto.remove();
+
+  advertCard.querySelector('.popup__avatar').src = advert.author.avatar;
+  return advertCard;
+}
+
+function renderCards(card) {
+  var fragment = document.createDocumentFragment();
+  card.forEach(function (item) {
+    fragment.appendChild(makeCard(item));
+  });
+  map.querySelector('.map__filters-container').before(fragment);
+}
+
+renderCards(advertisements);
