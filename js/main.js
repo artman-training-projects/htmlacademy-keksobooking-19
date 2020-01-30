@@ -187,12 +187,21 @@ function makeCard(advert) {
   var popupFeatures = advertCard.querySelector('.popup__features');
   popupFeatures.innerHTML = '';
   var features = advert.offer.features;
-  features.forEach(function (feature) {
-    var addFeature = document.createElement('li');
+
+  var addFeature;
+  if (features.length === 0) {
+    addFeature = document.createElement('li');
     addFeature.classList.add('popup__feature');
-    addFeature.classList.add('popup__feature--' + feature);
+    addFeature.style = 'background-image: none';
     popupFeatures.appendChild(addFeature);
-  });
+  } else {
+    features.forEach(function (feature) {
+      addFeature = document.createElement('li');
+      addFeature.classList.add('popup__feature');
+      addFeature.classList.add('popup__feature--' + feature);
+      popupFeatures.appendChild(addFeature);
+    });
+  }
 
   advertCard.querySelector('.popup__description').textContent = advert.offer.description;
 
