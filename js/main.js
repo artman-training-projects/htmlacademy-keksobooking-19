@@ -43,15 +43,32 @@ var Price = {
 var PHOTOS = ['http://o0.github.io/assets/images/tokyo/hotel1.jpg', 'http://o0.github.io/assets/images/tokyo/hotel2.jpg', 'http://o0.github.io/assets/images/tokyo/hotel3.jpg'];
 var CHECK_TIME = ['12:00', '13:00', '14:00'];
 
-
+/** @function
+ * @name getRandomMinMax
+ * @param {number} min минимальное число
+ * @param {number} max максимальное число
+ * @return {number} возвращает целое случайное из диапазона min и max
+ */
 function getRandomMinMax(min, max) {
   return Math.floor(Math.random() * (max - min) + min);
 }
 
+/** @function
+ * @name getRandomIndexFromArray
+ * @param {array} array массив
+ * @return {number} возвращает случайный индес из переданного массива
+ */
 function getRandomIndexFromArray(array) {
   return Math.floor(Math.random() * array.length);
 }
 
+
+/** @function
+ * @name getRandomElementsFromArray
+ * @param {array} array
+ * @param {number} n колличество элементов, извлекаемых из массива
+ * @return {array} возвращает массив случайных элементов, из элементов полученного массива
+ */
 function getRandomElementsFromArray(array, n) {
   var oldArray = array.slice();
   var newArray = [];
@@ -63,6 +80,11 @@ function getRandomElementsFromArray(array, n) {
   return newArray;
 }
 
+/** @function
+ * @name createRandomAdvertisement
+ * @param {number} i индекс создаваемого объявления
+ * @return {object} возвращает объект со случайными данными
+ */
 function createRandomAdvertisement(i) {
   var location = {
     x: getRandomMinMax(Сoordinates.X_MIN, Сoordinates.X_MAX),
@@ -98,6 +120,11 @@ function createRandomAdvertisement(i) {
   return advert;
 }
 
+/** @function
+ * @name createAdvertisementArray
+ * @param {number} count колличество создоваеммых объявлений
+ * @return {array} возвращает массив созданных объявлений
+ */
 function createAdvertisementArray(count) {
   var advertisementArray = [];
   for (var i = 0; i < count; i++) {
@@ -111,6 +138,12 @@ var map = document.querySelector('.map');
 map.classList.remove('map--faded');
 
 var templatePin = document.querySelector('#pin').content.querySelector('.map__pin');
+
+/** @function
+ * @name makePin
+ * @param {object} advert принимает объявление
+ * @return {object} возвращает html-элемент, раположение пина
+ */
 function makePin(advert) {
   var advertPin = templatePin.cloneNode(true);
   advertPin.style = 'left: ' + (advert.location.x - 25) + 'px; top: ' + (advert.location.y - 70) + 'px;';
@@ -119,6 +152,11 @@ function makePin(advert) {
   return advertPin;
 }
 
+/** @function
+ * @name renderPins
+ * @description вставляет пины в разметку
+ * @param {array} pin массив объявлений
+ */
 function renderPins(pin) {
   var fragment = document.createDocumentFragment();
   pin.forEach(function (item) {
@@ -130,7 +168,14 @@ function renderPins(pin) {
 renderPins(advertisements);
 
 var templateCard = document.querySelector('#card').content.querySelector('.map__card');
+
+/** @function
+ * @name makeCard
+ * @param {object} advert принимает объявление
+ * @return {object} возвращает html-элемент, карточка
+ */
 function makeCard(advert) {
+
   var advertCard = templateCard.cloneNode(true);
   advertCard.querySelector('.popup__title').textContent = advert.offer.title;
   advertCard.querySelector('.popup__text--address').textContent = advert.offer.address;
@@ -165,6 +210,11 @@ function makeCard(advert) {
   return advertCard;
 }
 
+/** @function
+ * @name renderCards
+ * @description вставляет обявления в разметку
+ * @param {array} card массив объявлений
+ */
 function renderCards(card) {
   var fragment = document.createDocumentFragment();
   card.forEach(function (item) {
