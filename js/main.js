@@ -138,7 +138,17 @@ function makeCard(advert) {
   advertCard.querySelector('.popup__type').textContent = Type[advert.offer.type];
   advertCard.querySelector('.popup__text--capacity').textContent = advert.offer.rooms + ' комнаты для ' + advert.offer.guests + ' гостей';
   advertCard.querySelector('.popup__text--time').textContent = 'Заезд после ' + advert.offer.checkin + ', выезд до ' + advert.offer.checkout;
-  advertCard.querySelector('.popup__features').querySelectorAll('.popup__feature').textContent = advert.offer.feature;
+
+  var popupFeatures = advertCard.querySelector('.popup__features');
+  popupFeatures.innerHTML = '';
+  var features = advert.offer.features;
+  features.forEach(function (feature) {
+    var addFeature = document.createElement('li');
+    addFeature.classList.add('popup__feature');
+    addFeature.classList.add('popup__feature--' + feature);
+    popupFeatures.appendChild(addFeature);
+  });
+
   advertCard.querySelector('.popup__description').textContent = advert.offer.description;
 
   var popupPhotos = advertCard.querySelector('.popup__photos');
