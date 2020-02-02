@@ -50,6 +50,84 @@ var Pins = {
   HEIGHT: 70
 };
 
+var Keyboard = {
+  ENTER: 'Enter'
+};
+
+var map = document.querySelector('.map');
+var mapPinMain = document.querySelector('.map__pin--main');
+var templatePin = document.querySelector('#pin').content.querySelector('.map__pin');
+var templateCard = document.querySelector('#card').content.querySelector('.map__card');
+var adForm = document.querySelector('.ad-form');
+var adFormInputs = adForm.querySelectorAll('input');
+var adFormSelects = adForm.querySelectorAll('selcet');
+var advertisements = createAdvertisementArray(COUNT_ADVERTISEMENTS);
+
+templateCard.style = 'visibility: hidden';
+
+adFormInputs.forEach(function (input) {
+  input.setAttribute('disabled', 'disabled');
+});
+
+adFormSelects.forEach(function (select) {
+  select.setAttribute('disabled', 'disabled');
+});
+
+// renderPins(advertisements);
+// renderCards(advertisements);
+
+
+/* Слушатели событий */
+mapPinMain.addEventListener('mousedown', onMapPinMousedown);
+mapPinMain.addEventListener('keydown', onMapPinKeydown);
+
+
+/* Обработчики событий */
+/** @function
+ * @name onMapPinMousedown
+ * @description при нажатии мышкой на пин делает карту активной
+ * @param {event} evt
+ */
+function onMapPinMousedown(evt) {
+  evt.preventDefault();
+
+  if (evt.which === 1) {
+    activePage();
+  }
+}
+
+/** @function
+ * @name onMapPinKeydown
+ * @description при нажатии энтером на пин делает карту активной
+ * @param {event} evt
+ */
+function onMapPinKeydown(evt) {
+  evt.preventDefault();
+
+  if (evt.key === Keyboard.ENTER) {
+    activePage();
+  }
+}
+
+/** @function
+ * @name activePage
+ * @description делает элементы страницы активными
+ */
+function activePage() {
+  map.classList.remove('map--faded');
+  adForm.classList.remove('ad-form--disabled');
+
+  adFormInputs.forEach(function (input) {
+    input.removeAttribute('disabled');
+  });
+
+  adFormSelects.forEach(function (select) {
+    select.removeAttribute('disabled');
+  });
+}
+
+
+/* Функции */
 /** @function
  * @name getRandomMinMax
  * @param {number} min минимальное число
@@ -140,12 +218,6 @@ function createAdvertisementArray(count) {
   }
   return advertisementArray;
 }
-var advertisements = createAdvertisementArray(COUNT_ADVERTISEMENTS);
-
-var map = document.querySelector('.map');
-map.classList.remove('map--faded');
-
-var templatePin = document.querySelector('#pin').content.querySelector('.map__pin');
 
 /** @function
  * @name makePin
@@ -173,18 +245,12 @@ function renderPins(pin) {
   map.querySelector('.map__pins').appendChild(fragment);
 }
 
-renderPins(advertisements);
-
-var templateCard = document.querySelector('#card').content.querySelector('.map__card');
-templateCard.style = 'visibility: hidden';
-
 /** @function
  * @name makeCard
  * @param {object} advert принимает объявление
  * @return {object} возвращает html-элемент, карточка
  */
 function makeCard(advert) {
-
   var advertCard = templateCard.cloneNode(true);
   advertCard.querySelector('.popup__title').textContent = advert.offer.title;
   advertCard.querySelector('.popup__text--address').textContent = advert.offer.address;
@@ -241,5 +307,3 @@ function renderCards(cards) {
   fragment.firstChild.style = 'visibility: visible';
   map.querySelector('.map__filters-container').before(fragment);
 }
-
-renderCards(advertisements);
