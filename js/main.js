@@ -47,48 +47,35 @@ var Price = {
 
 var Pins = {
   WIDTH: 50,
-  HEIGHT: 70
+  HEIGHT: 70,
+  WIDDTH_MAIN: 65,
+  HEIGHT_MAIN: 65
 };
 
 var Keyboard = {
-  ENTER: 'Enter'
+  ENTER: 'Enter',
+  LEFT_MOUSE: 1
 };
 
 var map = document.querySelector('.map');
 var mapPinMain = document.querySelector('.map__pin--main');
 
 var adForm = document.querySelector('.ad-form');
-var adFormInputs = adForm.querySelectorAll('input');
-var adFormSelects = adForm.querySelectorAll('selcet');
-var adFormTitle = adForm.querySelector('#title');
+var adFormFieldset = adForm.querySelectorAll('fieldset');
 var adFormAddress = adForm.querySelector('#address');
-var adFormType = adForm.querySelector('#type');
-var adFormPrice = adForm.querySelector('#price');
 
 var templatePin = document.querySelector('#pin').content.querySelector('.map__pin');
 var templateCard = document.querySelector('#card').content.querySelector('.map__card');
+templateCard.style = 'visibility: hidden';
 
 var advertisements = createAdvertisementArray(COUNT_ADVERTISEMENTS);
 
-templateCard.style = 'visibility: hidden';
-
-adFormInputs.forEach(function (input) {
-  input.setAttribute('disabled', 'disabled');
-});
-
-adFormSelects.forEach(function (select) {
-  select.setAttribute('disabled', 'disabled');
-});
-
-adFormAddress.setAttribute('value', Math.round(getCoordinates(mapPinMain).top + mapPinMain.offsetHeight / 2) + ', ' + Math.round(getCoordinates(mapPinMain).left + mapPinMain.offsetWidth / 2));
-
-// renderPins(advertisements);
-// renderCards(advertisements);
-
+isPageDisabled(true);
 
 /* Слушатели событий */
 mapPinMain.addEventListener('mousedown', onMapPinMousedown);
 mapPinMain.addEventListener('keydown', onMapPinKeydown);
+adForm.addEventListener('change', adFormChange);
 
 
 /* Обработчики событий */
@@ -100,8 +87,8 @@ mapPinMain.addEventListener('keydown', onMapPinKeydown);
 function onMapPinMousedown(evt) {
   evt.preventDefault();
 
-  if (evt.which === 1) {
-    activePage();
+  if (evt.which === Keyboard.LEFT_MOUSE) {
+    isPageDisabled(false);
   }
 }
 
@@ -114,33 +101,41 @@ function onMapPinKeydown(evt) {
   evt.preventDefault();
 
   if (evt.key === Keyboard.ENTER) {
-    activePage();
+    isPageDisabled(false);
   }
 }
 
 /** @function
- * @name activePage
- * @description делает элементы страницы активными
+ * @name adFormChange
+ * @description выполняет валидацию при внесении данных в форму
+ * @param {event} evt
  */
-function activePage() {
-  map.classList.remove('map--faded');
-  adForm.classList.remove('ad-form--disabled');
-
-  adFormInputs.forEach(function (input) {
-    input.removeAttribute('disabled');
-  });
-
-  adFormSelects.forEach(function (select) {
-    select.removeAttribute('disabled');
-  });
-
-  adFormAddress.setAttribute('disabled', 'disabled');
-  adFormAddress.setAttribute('value', Math.round(getCoordinates(mapPinMain).top + mapPinMain.offsetHeight) + ', ' + Math.round(getCoordinates(mapPinMain).left + mapPinMain.offsetWidth / 2));
-
-  mapPinMain.removeEventListener('mousedown', onMapPinMousedown);
-  mapPinMain.removeEventListener('keydown', onMapPinKeydown);
+function adFormChange(evt) {
+  checkHousingType(evt);
 }
 
+function checkHousingType(evt) {
+  var price = adForm.querySelector('#price');
+
+  switch (evt.target.value) {
+    case 'bungalo':
+      price.setAttribute('min', '0');
+      price.placeholder = 0;
+      break;
+    case 'flat':
+      price.setAttribute('min', '1000');
+      price.placeholder = 1000;
+      break;
+    case 'house':
+      price.setAttribute('min', '5000');
+      price.placeholder = 5000;
+      break;
+    case 'palace':
+      price.min = 10000;
+      price.placeholder = 10000;
+      break;
+  }
+}
 
 /* Функции */
 /** @function
@@ -319,7 +314,6 @@ function renderCards(cards) {
     fragment.appendChild(makeCard(item));
   });
 
-  fragment.firstChild.style = 'visibility: visible';
   map.querySelector('.map__filters-container').before(fragment);
 }
 
@@ -337,4 +331,34 @@ function getCoordinates(element) {
     top: pin.top + page.top,
     left: pin.left - page.left
   };
+}
+
+/** @function
+ * @name isPageDisabled
+ * @description ауправляет состояние страницы - активна или нет
+ * @param {boolean} state true - страница не активна, false - страница активна
+ */
+function isPageDisabled(state) {
+  if (state) {
+    adFormFieldset.forEach(function (fieldset) {
+      fieldset.setAttribute('disabled', 'disabled');
+    });
+
+    adFormAddress.setAttribute('value', Math.round(getCoordinates(mapPinMain).top + Pins.HEIGHT_MAIN / 2) + ', ' + Math.round(getCoordinates(mapPinMain).left + Pins.WIDDTH_MAIN / 2));
+  } else {
+    map.classList.remove('map--faded');
+    adForm.classList.remove('ad-form--disabled');
+
+    adFormFieldset.forEach(function (fieldset) {
+      fieldset.removeAttribute('disabled');
+    });
+
+    adFormAddress.setAttribute('disabled', 'disabled');
+    adFormAddress.setAttribute('value', Math.round(getCoordinates(mapPinMain).top + Pins.HEIGHT_MAIN) + ', ' + Math.round(getCoordinates(mapPinMain).left + Pins.WIDDTH_MAIN / 2));
+
+    renderPins(advertisements);
+    renderCards(advertisements);
+    mapPinMain.removeEventListener('mousedown', onMapPinMousedown);
+    mapPinMain.removeEventListener('keydown', onMapPinKeydown);
+  }
 }
