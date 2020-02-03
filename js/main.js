@@ -41,8 +41,8 @@ var Features = {
 };
 
 var Price = {
-  MIN: 100,
-  MAX: 1000
+  MIN: 0,
+  MAX: 1000000
 };
 
 var Pins = {
@@ -56,11 +56,18 @@ var Keyboard = {
 
 var map = document.querySelector('.map');
 var mapPinMain = document.querySelector('.map__pin--main');
-var templatePin = document.querySelector('#pin').content.querySelector('.map__pin');
-var templateCard = document.querySelector('#card').content.querySelector('.map__card');
+
 var adForm = document.querySelector('.ad-form');
 var adFormInputs = adForm.querySelectorAll('input');
 var adFormSelects = adForm.querySelectorAll('selcet');
+var adFormTitle = adForm.querySelector('#title');
+var adFormAddress = adForm.querySelector('#address');
+var adFormType = adForm.querySelector('#type');
+var adFormPrice = adForm.querySelector('#price');
+
+var templatePin = document.querySelector('#pin').content.querySelector('.map__pin');
+var templateCard = document.querySelector('#card').content.querySelector('.map__card');
+
 var advertisements = createAdvertisementArray(COUNT_ADVERTISEMENTS);
 
 templateCard.style = 'visibility: hidden';
@@ -72,6 +79,8 @@ adFormInputs.forEach(function (input) {
 adFormSelects.forEach(function (select) {
   select.setAttribute('disabled', 'disabled');
 });
+
+adFormAddress.setAttribute('value', Math.round(getCoordinates(mapPinMain).top + mapPinMain.offsetHeight / 2) + ', ' + Math.round(getCoordinates(mapPinMain).left + mapPinMain.offsetWidth / 2));
 
 // renderPins(advertisements);
 // renderCards(advertisements);
@@ -124,6 +133,12 @@ function activePage() {
   adFormSelects.forEach(function (select) {
     select.removeAttribute('disabled');
   });
+
+  adFormAddress.setAttribute('disabled', 'disabled');
+  adFormAddress.setAttribute('value', Math.round(getCoordinates(mapPinMain).top + mapPinMain.offsetHeight) + ', ' + Math.round(getCoordinates(mapPinMain).left + mapPinMain.offsetWidth / 2));
+
+  mapPinMain.removeEventListener('mousedown', onMapPinMousedown);
+  mapPinMain.removeEventListener('keydown', onMapPinKeydown);
 }
 
 
@@ -306,4 +321,20 @@ function renderCards(cards) {
 
   fragment.firstChild.style = 'visibility: visible';
   map.querySelector('.map__filters-container').before(fragment);
+}
+
+/** @function
+ * @name getCoordinates
+ * @description вычиляет координаты элемента top left, относительно body
+ * @param {*} element DOM-элемент
+ * @return {object} возвращает координаты top и left
+ */
+function getCoordinates(element) {
+  var pin = element.getBoundingClientRect();
+  var page = map.getBoundingClientRect();
+
+  return {
+    top: pin.top + page.top,
+    left: pin.left - page.left
+  };
 }
