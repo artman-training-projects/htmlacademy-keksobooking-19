@@ -324,12 +324,15 @@ function renderCards(cards) {
  * @return {object} возвращает координаты top и left
  */
 function getCoordinates(element) {
+  var maps = map.getBoundingClientRect();
   var pin = element.getBoundingClientRect();
-  var page = map.getBoundingClientRect();
 
+
+  console.log(maps);
+  console.log(pin);
   return {
-    top: pin.top + page.top,
-    left: pin.left - page.left
+    left: pin.left + pageXOffset - maps.x,
+    top: pin.top + pageYOffset
   };
 }
 
@@ -344,7 +347,7 @@ function isPageDisabled(state) {
       fieldset.setAttribute('disabled', 'disabled');
     });
 
-    adFormAddress.setAttribute('value', Math.round(getCoordinates(mapPinMain).top + Pins.HEIGHT_MAIN / 2) + ', ' + Math.round(getCoordinates(mapPinMain).left + Pins.WIDDTH_MAIN / 2));
+    adFormAddress.setAttribute('value', Math.round(getCoordinates(mapPinMain).left + Pins.WIDDTH_MAIN / 2) + ', ' + Math.round(getCoordinates(mapPinMain).top + Pins.HEIGHT_MAIN / 2));
   } else {
     map.classList.remove('map--faded');
     adForm.classList.remove('ad-form--disabled');
@@ -354,7 +357,7 @@ function isPageDisabled(state) {
     });
 
     adFormAddress.setAttribute('disabled', 'disabled');
-    adFormAddress.setAttribute('value', Math.round(getCoordinates(mapPinMain).top + Pins.HEIGHT_MAIN) + ', ' + Math.round(getCoordinates(mapPinMain).left + Pins.WIDDTH_MAIN / 2));
+    adFormAddress.setAttribute('value', Math.round(getCoordinates(mapPinMain).left + Pins.WIDDTH_MAIN / 2) + ', ' + Math.round(getCoordinates(mapPinMain).top + Pins.HEIGHT_MAIN));
 
     renderPins(advertisements);
     renderCards(advertisements);
