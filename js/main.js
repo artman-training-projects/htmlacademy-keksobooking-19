@@ -77,7 +77,6 @@ mapPinMain.addEventListener('mousedown', onMapPinMousedown);
 mapPinMain.addEventListener('keydown', onMapPinKeydown);
 adForm.addEventListener('change', adFormChange);
 
-
 /* Обработчики событий */
 /** @function
  * @name onMapPinMousedown
@@ -112,8 +111,14 @@ function onMapPinKeydown(evt) {
  */
 function adFormChange(evt) {
   checkHousingType(evt);
+  checkTime(evt);
 }
 
+/** @function
+ * @name checkHousingType
+ * @description выставляет ограничивает минимальную цену, согласно типа жилья
+ * @param {*} evt
+ */
 function checkHousingType(evt) {
   var price = adForm.querySelector('#price');
 
@@ -133,6 +138,31 @@ function checkHousingType(evt) {
     case 'palace':
       price.min = 10000;
       price.placeholder = 10000;
+      break;
+  }
+}
+
+/** @function
+ * @name checkTime
+ * @description выставляет соответствие времени въезда и выезда
+ * @param {*} evt
+ */
+function checkTime(evt) {
+  var checkin = adForm.querySelector('#timein');
+  var checkout = adForm.querySelector('#timeout');
+
+  switch (evt.target.value) {
+    case '12:00':
+      checkin.value = '12:00';
+      checkout.value = '12:00';
+      break;
+    case '13:00':
+      checkin.value = '13:00';
+      checkout.value = '13:00';
+      break;
+    case '14:00':
+      checkin.value = '14:00';
+      checkout.value = '14:00';
       break;
   }
 }
@@ -327,9 +357,6 @@ function getCoordinates(element) {
   var maps = map.getBoundingClientRect();
   var pin = element.getBoundingClientRect();
 
-
-  console.log(maps);
-  console.log(pin);
   return {
     left: pin.left + pageXOffset - maps.x,
     top: pin.top + pageYOffset
