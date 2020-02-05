@@ -112,6 +112,7 @@ function onMapPinKeydown(evt) {
 function adFormChange(evt) {
   checkHousingType(evt);
   checkTime(evt);
+  checkRooms(evt);
 }
 
 /** @function
@@ -164,6 +165,45 @@ function checkTime(evt) {
       checkin.value = '14:00';
       checkout.value = '14:00';
       break;
+  }
+}
+
+/** @function
+ * @name checkRooms
+ * @description выстовляет соответствие между колличеством комнат, и возможного размещения гостей
+ * @param {*} evt
+ */
+function checkRooms(evt) {
+  var rooms = adForm.querySelector('#room_number');
+  var capacity = adForm.querySelector('#capacity');
+
+  if (evt.target === rooms) {
+    switch (evt.target.value) {
+      case '1':
+        capacity[0].setAttribute('disabled', 'disabled');
+        capacity[1].setAttribute('disabled', 'disabled');
+        capacity[2].removeAttribute('disabled');
+        capacity[3].setAttribute('disabled', 'disabled');
+        break;
+      case '2':
+        capacity[0].setAttribute('disabled', 'disabled');
+        capacity[1].removeAttribute('disabled');
+        capacity[2].removeAttribute('disabled');
+        capacity[3].setAttribute('disabled', 'disabled');
+        break;
+      case '3':
+        capacity[0].removeAttribute('disabled');
+        capacity[1].removeAttribute('disabled');
+        capacity[2].removeAttribute('disabled');
+        capacity[3].setAttribute('disabled', 'disabled');
+        break;
+      case '100':
+        capacity[0].setAttribute('disabled', 'disabled');
+        capacity[1].setAttribute('disabled', 'disabled');
+        capacity[2].setAttribute('disabled', 'disabled');
+        capacity[3].removeAttribute('disabled');
+        break;
+    }
   }
 }
 
