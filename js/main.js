@@ -10,8 +10,10 @@ var CHECK_TIMES = ['12:00', '13:00', '14:00'];
 var Сoordinates = {
   X_MIN: 0,
   X_MAX: 1200,
+  X_START: 570,
   Y_MIN: 130,
-  Y_MAX: 630
+  Y_MAX: 630,
+  Y_START: 375
 };
 
 var Type = {
@@ -49,7 +51,7 @@ var Pins = {
   WIDTH: 50,
   HEIGHT: 70,
   WIDDTH_MAIN: 65,
-  HEIGHT_MAIN: 65
+  HEIGHT_MAIN: 85
 };
 
 var Keyboard = {
@@ -306,9 +308,11 @@ function makePin(advert) {
  */
 function renderPins(pin) {
   var fragment = document.createDocumentFragment();
+
   pin.forEach(function (item) {
     fragment.appendChild(makePin(item));
   });
+
   map.querySelector('.map__pins').appendChild(fragment);
 }
 
@@ -404,7 +408,7 @@ function isPageDisabled(state) {
       fieldset.setAttribute('disabled', 'disabled');
     });
 
-    adFormAddress.setAttribute('value', Math.round(getCoordinates(mapPinMain).left + Pins.WIDDTH_MAIN / 2) + ', ' + Math.round(getCoordinates(mapPinMain).top + Pins.HEIGHT_MAIN / 2));
+    adFormAddress.setAttribute('value', Math.round(Сoordinates.X_START + Pins.WIDDTH_MAIN / 2) + ', ' + Math.round(Сoordinates.Y_START + Pins.HEIGHT_MAIN / 2));
 
     var pins = map.querySelectorAll('.map__pin');
     pins.forEach(function (pin) {
@@ -429,7 +433,7 @@ function isPageDisabled(state) {
     });
 
     adFormAddress.setAttribute('disabled', 'disabled');
-    adFormAddress.setAttribute('value', Math.round(getCoordinates(mapPinMain).left + Pins.WIDDTH_MAIN / 2) + ', ' + Math.round(getCoordinates(mapPinMain).top + Pins.HEIGHT_MAIN));
+    adFormAddress.setAttribute('value', Math.round(Сoordinates.X_START + Pins.WIDDTH_MAIN / 2) + ', ' + Math.round(Сoordinates.Y_START + Pins.HEIGHT_MAIN));
 
     renderPins(advertisements);
     renderCards(advertisements);
