@@ -73,33 +73,20 @@ var advertisements = createAdvertisementArray(COUNT_ADVERTISEMENTS);
 isPageDisabled(true);
 
 /* Слушатели событий */
-mapPinMain.addEventListener('mousedown', onMapPinMousedown);
-mapPinMain.addEventListener('keydown', onMapPinKeydown);
+mapPinMain.addEventListener('mousedown', onMapPinClick);
+mapPinMain.addEventListener('keydown', onMapPinClick);
 adForm.addEventListener('change', adFormChange);
 
 /* Обработчики событий */
 /** @function
- * @name onMapPinMousedown
+ * @name onMapPinClick
  * @description при нажатии мышкой на пин делает карту активной
  * @param {event} evt
  */
-function onMapPinMousedown(evt) {
+function onMapPinClick(evt) {
   evt.preventDefault();
 
-  if (evt.which === Keyboard.LEFT_MOUSE) {
-    isPageDisabled(false);
-  }
-}
-
-/** @function
- * @name onMapPinKeydown
- * @description при нажатии энтером на пин делает карту активной
- * @param {event} evt
- */
-function onMapPinKeydown(evt) {
-  evt.preventDefault();
-
-  if (evt.key === Keyboard.ENTER) {
+  if ((evt.which === Keyboard.LEFT_MOUSE) || (evt.key === Keyboard.ENTER)) {
     isPageDisabled(false);
   }
 }
@@ -410,11 +397,29 @@ function getCoordinates(element) {
  */
 function isPageDisabled(state) {
   if (state) {
+    map.classList.add('map--faded');
+    adForm.classList.add('ad-form--disabled');
+
     adFormFieldset.forEach(function (fieldset) {
       fieldset.setAttribute('disabled', 'disabled');
     });
 
     adFormAddress.setAttribute('value', Math.round(getCoordinates(mapPinMain).left + Pins.WIDDTH_MAIN / 2) + ', ' + Math.round(getCoordinates(mapPinMain).top + Pins.HEIGHT_MAIN / 2));
+
+    var pins = map.querySelectorAll('.map__pin');
+    pins.forEach(function (pin) {
+      if (!pin.classList.contains('map__pin--main')) {
+        pin.remove();
+      }
+    });
+
+    var cards = map.querySelectorAll('.map__card');
+    cards.forEach(function (card) {
+      card.remove();
+    });
+
+    mapPinMain.addEventListener('mousedown', onMapPinClick);
+    mapPinMain.addEventListener('keydown', onMapPinClick);
   } else {
     map.classList.remove('map--faded');
     adForm.classList.remove('ad-form--disabled');
@@ -428,7 +433,8 @@ function isPageDisabled(state) {
 
     renderPins(advertisements);
     renderCards(advertisements);
-    mapPinMain.removeEventListener('mousedown', onMapPinMousedown);
-    mapPinMain.removeEventListener('keydown', onMapPinKeydown);
+
+    mapPinMain.removeEventListener('mousedown', onMapPinClick);
+    mapPinMain.removeEventListener('keydown', onMapPinClick);
   }
 }
