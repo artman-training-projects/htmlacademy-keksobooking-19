@@ -10,8 +10,10 @@ var CHECK_TIMES = ['12:00', '13:00', '14:00'];
 var Сoordinates = {
   X_MIN: 0,
   X_MAX: 1200,
+  X_START: 570,
   Y_MIN: 130,
-  Y_MAX: 630
+  Y_MAX: 630,
+  Y_START: 375
 };
 
 var Type = {
@@ -47,100 +49,152 @@ var Price = {
 
 var Pins = {
   WIDTH: 50,
-  HEIGHT: 70
+  HEIGHT: 70,
+  WIDDTH_MAIN: 65,
+  HEIGHT_MAIN: 85
 };
 
 var Keyboard = {
-  ENTER: 'Enter'
+  ENTER: 'Enter',
+  LEFT_MOUSE: 1
 };
 
 var map = document.querySelector('.map');
 var mapPinMain = document.querySelector('.map__pin--main');
 
 var adForm = document.querySelector('.ad-form');
-var adFormInputs = adForm.querySelectorAll('input');
-var adFormSelects = adForm.querySelectorAll('selcet');
-var adFormTitle = adForm.querySelector('#title');
+var adFormFieldset = adForm.querySelectorAll('fieldset');
 var adFormAddress = adForm.querySelector('#address');
-var adFormType = adForm.querySelector('#type');
-var adFormPrice = adForm.querySelector('#price');
 
 var templatePin = document.querySelector('#pin').content.querySelector('.map__pin');
 var templateCard = document.querySelector('#card').content.querySelector('.map__card');
+templateCard.style = 'visibility: hidden';
 
 var advertisements = createAdvertisementArray(COUNT_ADVERTISEMENTS);
 
-templateCard.style = 'visibility: hidden';
-
-adFormInputs.forEach(function (input) {
-  input.setAttribute('disabled', 'disabled');
-});
-
-adFormSelects.forEach(function (select) {
-  select.setAttribute('disabled', 'disabled');
-});
-
-adFormAddress.setAttribute('value', Math.round(getCoordinates(mapPinMain).top + mapPinMain.offsetHeight / 2) + ', ' + Math.round(getCoordinates(mapPinMain).left + mapPinMain.offsetWidth / 2));
-
-// renderPins(advertisements);
-// renderCards(advertisements);
-
+isPageDisabled(true);
 
 /* Слушатели событий */
-mapPinMain.addEventListener('mousedown', onMapPinMousedown);
-mapPinMain.addEventListener('keydown', onMapPinKeydown);
-
+mapPinMain.addEventListener('mousedown', onMapPinClick);
+mapPinMain.addEventListener('keydown', onMapPinClick);
+adForm.addEventListener('change', adFormChange);
 
 /* Обработчики событий */
 /** @function
- * @name onMapPinMousedown
+ * @name onMapPinClick
  * @description при нажатии мышкой на пин делает карту активной
  * @param {event} evt
  */
-function onMapPinMousedown(evt) {
+function onMapPinClick(evt) {
   evt.preventDefault();
 
-  if (evt.which === 1) {
-    activePage();
+  if ((evt.which === Keyboard.LEFT_MOUSE) || (evt.key === Keyboard.ENTER)) {
+    isPageDisabled(false);
   }
 }
 
 /** @function
- * @name onMapPinKeydown
- * @description при нажатии энтером на пин делает карту активной
+ * @name adFormChange
+ * @description выполняет валидацию при внесении данных в форму
  * @param {event} evt
  */
-function onMapPinKeydown(evt) {
-  evt.preventDefault();
+function adFormChange(evt) {
+  checkHousingType(evt);
+  checkTime(evt);
+  checkRooms(evt);
+}
 
-  if (evt.key === Keyboard.ENTER) {
-    activePage();
+/** @function
+ * @name checkHousingType
+ * @description выставляет ограничивает минимальную цену, согласно типа жилья
+ * @param {*} evt
+ */
+function checkHousingType(evt) {
+  var price = adForm.querySelector('#price');
+
+  switch (evt.target.value) {
+    case 'bungalo':
+      price.setAttribute('min', '0');
+      price.placeholder = 0;
+      break;
+    case 'flat':
+      price.setAttribute('min', '1000');
+      price.placeholder = 1000;
+      break;
+    case 'house':
+      price.setAttribute('min', '5000');
+      price.placeholder = 5000;
+      break;
+    case 'palace':
+      price.min = 10000;
+      price.placeholder = 10000;
+      break;
   }
 }
 
 /** @function
- * @name activePage
- * @description делает элементы страницы активными
+ * @name checkTime
+ * @description выставляет соответствие времени въезда и выезда
+ * @param {*} evt
  */
-function activePage() {
-  map.classList.remove('map--faded');
-  adForm.classList.remove('ad-form--disabled');
+function checkTime(evt) {
+  var checkin = adForm.querySelector('#timein');
+  var checkout = adForm.querySelector('#timeout');
 
-  adFormInputs.forEach(function (input) {
-    input.removeAttribute('disabled');
-  });
-
-  adFormSelects.forEach(function (select) {
-    select.removeAttribute('disabled');
-  });
-
-  adFormAddress.setAttribute('disabled', 'disabled');
-  adFormAddress.setAttribute('value', Math.round(getCoordinates(mapPinMain).top + mapPinMain.offsetHeight) + ', ' + Math.round(getCoordinates(mapPinMain).left + mapPinMain.offsetWidth / 2));
-
-  mapPinMain.removeEventListener('mousedown', onMapPinMousedown);
-  mapPinMain.removeEventListener('keydown', onMapPinKeydown);
+  switch (evt.target.value) {
+    case '12:00':
+      checkin.value = '12:00';
+      checkout.value = '12:00';
+      break;
+    case '13:00':
+      checkin.value = '13:00';
+      checkout.value = '13:00';
+      break;
+    case '14:00':
+      checkin.value = '14:00';
+      checkout.value = '14:00';
+      break;
+  }
 }
 
+/** @function
+ * @name checkRooms
+ * @description выстовляет соответствие между колличеством комнат, и возможного размещения гостей
+ * @param {*} evt
+ */
+function checkRooms(evt) {
+  var rooms = adForm.querySelector('#room_number');
+  var capacity = adForm.querySelector('#capacity');
+
+  if (evt.target === rooms) {
+    switch (evt.target.value) {
+      case '1':
+        capacity[0].setAttribute('disabled', 'disabled');
+        capacity[1].setAttribute('disabled', 'disabled');
+        capacity[2].removeAttribute('disabled');
+        capacity[3].setAttribute('disabled', 'disabled');
+        break;
+      case '2':
+        capacity[0].setAttribute('disabled', 'disabled');
+        capacity[1].removeAttribute('disabled');
+        capacity[2].removeAttribute('disabled');
+        capacity[3].setAttribute('disabled', 'disabled');
+        break;
+      case '3':
+        capacity[0].removeAttribute('disabled');
+        capacity[1].removeAttribute('disabled');
+        capacity[2].removeAttribute('disabled');
+        capacity[3].setAttribute('disabled', 'disabled');
+        break;
+      case '100':
+        capacity[0].setAttribute('disabled', 'disabled');
+        capacity[1].setAttribute('disabled', 'disabled');
+        capacity[2].setAttribute('disabled', 'disabled');
+        capacity[3].removeAttribute('disabled');
+        break;
+    }
+  }
+}
 
 /* Функции */
 /** @function
@@ -254,9 +308,11 @@ function makePin(advert) {
  */
 function renderPins(pin) {
   var fragment = document.createDocumentFragment();
+
   pin.forEach(function (item) {
     fragment.appendChild(makePin(item));
   });
+
   map.querySelector('.map__pins').appendChild(fragment);
 }
 
@@ -319,7 +375,6 @@ function renderCards(cards) {
     fragment.appendChild(makeCard(item));
   });
 
-  fragment.firstChild.style = 'visibility: visible';
   map.querySelector('.map__filters-container').before(fragment);
 }
 
@@ -330,11 +385,60 @@ function renderCards(cards) {
  * @return {object} возвращает координаты top и left
  */
 function getCoordinates(element) {
+  var maps = map.getBoundingClientRect();
   var pin = element.getBoundingClientRect();
-  var page = map.getBoundingClientRect();
 
   return {
-    top: pin.top + page.top,
-    left: pin.left - page.left
+    left: pin.left + pageXOffset - maps.x,
+    top: pin.top + pageYOffset
   };
+}
+
+/** @function
+ * @name isPageDisabled
+ * @description ауправляет состояние страницы - активна или нет
+ * @param {boolean} state true - страница не активна, false - страница активна
+ */
+function isPageDisabled(state) {
+  if (state) {
+    map.classList.add('map--faded');
+    adForm.classList.add('ad-form--disabled');
+
+    adFormFieldset.forEach(function (fieldset) {
+      fieldset.setAttribute('disabled', 'disabled');
+    });
+
+    adFormAddress.setAttribute('value', Math.round(Сoordinates.X_START + Pins.WIDDTH_MAIN / 2) + ', ' + Math.round(Сoordinates.Y_START + Pins.HEIGHT_MAIN / 2));
+
+    var pins = map.querySelectorAll('.map__pin');
+    pins.forEach(function (pin) {
+      if (!pin.classList.contains('map__pin--main')) {
+        pin.remove();
+      }
+    });
+
+    var cards = map.querySelectorAll('.map__card');
+    cards.forEach(function (card) {
+      card.remove();
+    });
+
+    mapPinMain.addEventListener('mousedown', onMapPinClick);
+    mapPinMain.addEventListener('keydown', onMapPinClick);
+  } else {
+    map.classList.remove('map--faded');
+    adForm.classList.remove('ad-form--disabled');
+
+    adFormFieldset.forEach(function (fieldset) {
+      fieldset.removeAttribute('disabled');
+    });
+
+    adFormAddress.setAttribute('disabled', 'disabled');
+    adFormAddress.setAttribute('value', Math.round(Сoordinates.X_START + Pins.WIDDTH_MAIN / 2) + ', ' + Math.round(Сoordinates.Y_START + Pins.HEIGHT_MAIN));
+
+    renderPins(advertisements);
+    renderCards(advertisements);
+
+    mapPinMain.removeEventListener('mousedown', onMapPinClick);
+    mapPinMain.removeEventListener('keydown', onMapPinClick);
+  }
 }
