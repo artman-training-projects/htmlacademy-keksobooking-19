@@ -11,7 +11,7 @@
   adFormAddress.setAttribute('disabled', 'disabled');
   adFormAddress.setAttribute('value', Math.round(window.map.MainPin.X_START + window.map.MainPin.WIDTH / 2) + ', ' + Math.round(window.map.MainPin.Y_START + window.map.MainPin.HEIGHT / 2));
 
-  adForm.addEventListener('change', adFormChange);
+  adForm.addEventListener('change', onFormChange);
 
   function adFormDisabling(state) {
     switch (state) {
@@ -37,11 +37,11 @@
   }
 
   /** @function
-   * @name adFormChange
+   * @name onFormChange
    * @description выполняет валидацию при внесении данных в форму
    * @param {event} evt
    */
-  function adFormChange(evt) {
+  function onFormChange(evt) {
     checkHousingType(evt);
     checkTime(evt);
     checkRooms(evt);
