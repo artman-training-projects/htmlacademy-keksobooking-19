@@ -59,24 +59,46 @@
     popupPhoto.remove();
 
     advertCard.querySelector('.popup__avatar').src = advert.author.avatar;
+
+    var popupClose = advertCard.querySelector('.popup__close');
+
+    /* Слушатели событий */
+    popupClose.addEventListener('mousedown', onPopupCloseMousedown);
+    map.addEventListener('keydown', onPopupCloseKeydown);
+
+    /* Обработчики событий */
+    function onPopupCloseMousedown(evt) {
+      if (evt.which === window.util.KeysClick.LEFT_MOUSE) {
+        advertCard.remove();
+        popupClose.removeEventListener('mousedown', onPopupCloseMousedown);
+        map.removeEventListener('keydown', onPopupCloseKeydown);
+      }
+    }
+
+    function onPopupCloseKeydown(evt) {
+      if (evt.key === window.util.KeysClick.ESCAPE) {
+        advertCard.remove();
+        popupClose.removeEventListener('mousedown', onPopupCloseMousedown);
+        map.removeEventListener('keydown', onPopupCloseKeydown);
+      }
+    }
+
     return advertCard;
   }
 
   /** @function
-   * @name renderCards
+   * @name renderCard
    * @description вставляет обявления в разметку
-   * @param {array} cards массив объявлений
+   * @param {number} card массив объявлений
    */
-  function renderCards(cards) {
+  function renderCard(card) {
     var fragment = document.createDocumentFragment();
-    cards.forEach(function (item) {
-      fragment.appendChild(makeCard(item));
-    });
+    fragment.appendChild(makeCard(card));
 
     map.querySelector('.map__filters-container').before(fragment);
   }
 
   window.card = {
-    renderCards: renderCards
+    render: renderCard
   };
 })();

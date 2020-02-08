@@ -11,8 +11,13 @@
   adFormAddress.setAttribute('disabled', 'disabled');
   adFormAddress.setAttribute('value', Math.round(window.map.MainPin.X_START + window.map.MainPin.WIDTH / 2) + ', ' + Math.round(window.map.MainPin.Y_START + window.map.MainPin.HEIGHT / 2));
 
-  adForm.addEventListener('change', onFormChange);
+  adForm.addEventListener('input', onFormChange);
 
+  /** @function
+   * @name adFormDisabling
+   * @description откл/вкл формы
+   * @param {boolean} state true - отключение формы, false - включение формы
+   */
   function adFormDisabling(state) {
     switch (state) {
       case true:
@@ -21,7 +26,7 @@
         adFormFieldset.forEach(function (fieldset) {
           fieldset.setAttribute('disabled', 'disabled');
         });
-        adFormAddress.setAttribute('value', Math.round(window.map.MainPin.X_START + window.map.MainPin.WIDTH / 2) + ', ' + Math.round(window.map.MainPin.Y_START + window.map.MainPin.HEIGHT / 2));
+        adFormAddress.value = Math.round(window.map.MainPin.X_START + window.map.MainPin.WIDTH / 2) + ', ' + Math.round(window.map.MainPin.Y_START + window.map.MainPin.HEIGHT / 2);
         break;
       case false:
         adForm.classList.remove('ad-form--disabled');
@@ -30,8 +35,8 @@
           fieldset.removeAttribute('disabled');
         });
 
-        adFormAddress.setAttribute('disabled', 'disabled');
-        adFormAddress.setAttribute('value', Math.round(window.map.MainPin.X_START + window.map.MainPin.WIDTH / 2) + ', ' + Math.round(window.map.MainPin.Y_START + window.map.MainPin.HEIGHT));
+        adFormAddress.removeAttribute('disabled');
+        adFormAddress.value = Math.round(window.map.MainPin.X_START + window.map.MainPin.WIDTH / 2) + ', ' + Math.round(window.map.MainPin.Y_START + window.map.MainPin.HEIGHT);
         break;
     }
   }
@@ -42,9 +47,18 @@
    * @param {event} evt
    */
   function onFormChange(evt) {
-    checkHousingType(evt);
-    checkTime(evt);
-    checkRooms(evt);
+    switch (evt.target.id) {
+      case 'type':
+        checkHousingType(evt);
+        break;
+      case 'timein':
+      case 'timeout':
+        checkTime(evt);
+        break;
+      case 'room_number':
+        checkRooms(evt);
+        break;
+    }
   }
 
   /** @function
@@ -55,24 +69,15 @@
   function checkHousingType(evt) {
     var price = adForm.querySelector('#price');
 
-    switch (evt.target.value) {
-      case 'bungalo':
-        price.setAttribute('min', '0');
-        price.placeholder = 0;
-        break;
-      case 'flat':
-        price.setAttribute('min', '1000');
-        price.placeholder = 1000;
-        break;
-      case 'house':
-        price.setAttribute('min', '5000');
-        price.placeholder = 5000;
-        break;
-      case 'palace':
-        price.min = 10000;
-        price.placeholder = 10000;
-        break;
-    }
+    var HousePrice = {
+      bungalo: 0,
+      flat: 1000,
+      house: 5000,
+      palace: 10000
+    };
+
+    price.setAttribute('min', HousePrice[evt.target.value]);
+    price.placeholder = HousePrice[evt.target.value];
   }
 
   /** @function
@@ -81,21 +86,15 @@
    * @param {*} evt
    */
   function checkTime(evt) {
-    var checkin = adForm.querySelector('#timein');
-    var checkout = adForm.querySelector('#timeout');
+    var timein = adForm.querySelector('#timein');
+    var timeout = adForm.querySelector('#timeout');
 
-    switch (evt.target.value) {
-      case '12:00':
-        checkin.value = '12:00';
-        checkout.value = '12:00';
+    switch (evt.target) {
+      case timein:
+        timeout.value = evt.target.value;
         break;
-      case '13:00':
-        checkin.value = '13:00';
-        checkout.value = '13:00';
-        break;
-      case '14:00':
-        checkin.value = '14:00';
-        checkout.value = '14:00';
+      case timeout:
+        timein.value = evt.target.value;
         break;
     }
   }
@@ -106,40 +105,46 @@
    * @param {*} evt
    */
   function checkRooms(evt) {
-    var rooms = adForm.querySelector('#room_number');
     var capacity = adForm.querySelector('#capacity');
 
-    if (evt.target === rooms) {
-      switch (evt.target.value) {
-        case '1':
-          capacity[0].setAttribute('disabled', 'disabled');
-          capacity[1].setAttribute('disabled', 'disabled');
-          capacity[2].removeAttribute('disabled');
-          capacity[3].setAttribute('disabled', 'disabled');
-          break;
-        case '2':
-          capacity[0].setAttribute('disabled', 'disabled');
-          capacity[1].removeAttribute('disabled');
-          capacity[2].removeAttribute('disabled');
-          capacity[3].setAttribute('disabled', 'disabled');
-          break;
-        case '3':
-          capacity[0].removeAttribute('disabled');
-          capacity[1].removeAttribute('disabled');
-          capacity[2].removeAttribute('disabled');
-          capacity[3].setAttribute('disabled', 'disabled');
-          break;
-        case '100':
-          capacity[0].setAttribute('disabled', 'disabled');
-          capacity[1].setAttribute('disabled', 'disabled');
-          capacity[2].setAttribute('disabled', 'disabled');
-          capacity[3].removeAttribute('disabled');
-          break;
-      }
+    // var Rooms = {
+    //   1: [1],
+    //   2: [1, 2],
+    //   3: [1, 2, 3],
+    //   100: 0
+    // };
+
+    // capacity[evt.target.value].setAttribute('selected', 'selected');
+
+    switch (evt.target.value) {
+      case '1':
+        capacity[0].style = 'display: none;';
+        capacity[1].style = 'display: none;';
+        capacity[2].style = 'display: block;';
+        capacity[3].style = 'display: none;';
+        break;
+      case '2':
+        capacity[0].style = 'display: none;';
+        capacity[1].style = 'display: block;';
+        capacity[2].style = 'display: block;';
+        capacity[3].style = 'display: none;';
+        break;
+      case '3':
+        capacity[0].style = 'display: block;';
+        capacity[1].style = 'display: block;';
+        capacity[2].style = 'display: block;';
+        capacity[3].style = 'display: none;';
+        break;
+      case '100':
+        capacity[0].style = 'display: none;';
+        capacity[1].style = 'display: none;';
+        capacity[2].style = 'display: none;';
+        capacity[3].style = 'display: block;';
+        break;
     }
   }
 
   window.form = {
-    adFormDisabling: adFormDisabling
+    disabling: adFormDisabling
   };
 })();

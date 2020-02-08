@@ -87,11 +87,11 @@
   }
 
   /** @function
-   * @name createAdvertisementArray
+   * @name createAdvertisements
    * @param {number} count колличество создоваеммых объявлений
    * @return {array} возвращает массив созданных объявлений
    */
-  function createAdvertisementArray(count) {
+  function createAdvertisements(count) {
     var advertisementArray = [];
     for (var i = 0; i < count; i++) {
       advertisementArray.push(createRandomAdvertisement(i + 1));
@@ -100,6 +100,6 @@
   }
 
   window.mock = {
-    createAdvertisementArray: createAdvertisementArray
+    createAdvertisements: createAdvertisements
   };
 })();
