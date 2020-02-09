@@ -46,7 +46,7 @@
     return newArray;
   }
 
-  window.util = {
+  window.utils = {
     KeysClick: KeysClick,
     getRandomMinMax: getRandomMinMax,
     getRandomIndexFromArray: getRandomIndexFromArray,

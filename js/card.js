@@ -68,7 +68,7 @@
 
     /* Обработчики событий */
     function onPopupCloseMousedown(evt) {
-      if (evt.which === window.util.KeysClick.LEFT_MOUSE) {
+      if (evt.which === window.utils.KeysClick.LEFT_MOUSE) {
         advertCard.remove();
         popupClose.removeEventListener('mousedown', onPopupCloseMousedown);
         map.removeEventListener('keydown', onPopupCloseKeydown);
@@ -76,7 +76,7 @@
     }
 
     function onPopupCloseKeydown(evt) {
-      if (evt.key === window.util.KeysClick.ESCAPE) {
+      if (evt.key === window.utils.KeysClick.ESCAPE) {
         advertCard.remove();
         popupClose.removeEventListener('mousedown', onPopupCloseMousedown);
         map.removeEventListener('keydown', onPopupCloseKeydown);

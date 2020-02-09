@@ -7,11 +7,11 @@
   var adForm = document.querySelector('.ad-form');
   var adFormAddress = adForm.querySelector('#address');
   var adFormFieldset = adForm.querySelectorAll('fieldset');
+  var capSelect = adForm.querySelector('#capacity');
+  var capOptions = capSelect.querySelectorAll('option');
 
   adFormAddress.setAttribute('disabled', 'disabled');
   adFormAddress.setAttribute('value', Math.round(window.map.MainPin.X_START + window.map.MainPin.WIDTH / 2) + ', ' + Math.round(window.map.MainPin.Y_START + window.map.MainPin.HEIGHT / 2));
-
-  adForm.addEventListener('input', onFormChange);
 
   /** @function
    * @name adFormDisabling
@@ -26,6 +26,8 @@
         adFormFieldset.forEach(function (fieldset) {
           fieldset.setAttribute('disabled', 'disabled');
         });
+
+        adForm.removeEventListener('change', onFormChange);
         adFormAddress.value = Math.round(window.map.MainPin.X_START + window.map.MainPin.WIDTH / 2) + ', ' + Math.round(window.map.MainPin.Y_START + window.map.MainPin.HEIGHT / 2);
         break;
       case false:
@@ -35,7 +37,14 @@
           fieldset.removeAttribute('disabled');
         });
 
+        capOptions.forEach(function (option) {
+          option.disabled = true;
+          option.selected = false;
+          option.removeAttribute('selected');
+        });
+
         adFormAddress.removeAttribute('disabled');
+        adForm.addEventListener('change', onFormChange);
         adFormAddress.value = Math.round(window.map.MainPin.X_START + window.map.MainPin.WIDTH / 2) + ', ' + Math.round(window.map.MainPin.Y_START + window.map.MainPin.HEIGHT);
         break;
     }
@@ -105,46 +114,28 @@
    * @param {*} evt
    */
   function checkRooms(evt) {
-    var capacity = adForm.querySelector('#capacity');
+    var value = evt.target.value;
 
-    // var Rooms = {
-    //   1: [1],
-    //   2: [1, 2],
-    //   3: [1, 2, 3],
-    //   100: 0
-    // };
+    var RoomsCapasity = {
+      1: [1],
+      2: [1, 2],
+      3: [1, 2, 3],
+      100: [0]
+    };
 
-    // capacity[evt.target.value].setAttribute('selected', 'selected');
+    capOptions.forEach(function (option) {
+      option.disabled = true;
+      option.selected = false;
+      option.removeAttribute('selected');
+    });
 
-    switch (evt.target.value) {
-      case '1':
-        capacity[0].style = 'display: none;';
-        capacity[1].style = 'display: none;';
-        capacity[2].style = 'display: block;';
-        capacity[3].style = 'display: none;';
-        break;
-      case '2':
-        capacity[0].style = 'display: none;';
-        capacity[1].style = 'display: block;';
-        capacity[2].style = 'display: block;';
-        capacity[3].style = 'display: none;';
-        break;
-      case '3':
-        capacity[0].style = 'display: block;';
-        capacity[1].style = 'display: block;';
-        capacity[2].style = 'display: block;';
-        capacity[3].style = 'display: none;';
-        break;
-      case '100':
-        capacity[0].style = 'display: none;';
-        capacity[1].style = 'display: none;';
-        capacity[2].style = 'display: none;';
-        capacity[3].style = 'display: block;';
-        break;
+    for (var i = 0; i < RoomsCapasity[value].length; i++) {
+      capSelect.querySelector('option' + '[value="' + RoomsCapasity[value][i] + '"]').disabled = false;
     }
   }
 
   window.form = {
-    disabling: adFormDisabling
+    disabling: adFormDisabling,
+    onChange: onFormChange
   };
 })();

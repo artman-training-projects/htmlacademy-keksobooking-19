@@ -6,7 +6,7 @@
 (function () {
   var COUNT_ADVERTISEMENTS = 8;
   var map = document.querySelector('.map');
-  var mapPinMain = document.querySelector('.map__pin--main');
+  var mainPin = document.querySelector('.map__pin--main');
 
   var adForm = document.querySelector('.ad-form');
   var adFormReset = document.querySelector('.ad-form__reset');
@@ -14,8 +14,8 @@
   var advertisements = window.mock.createAdvertisements(COUNT_ADVERTISEMENTS);
 
   /* Слушатели событий */
-  mapPinMain.addEventListener('mousedown', onMapPinMousedown);
-  mapPinMain.addEventListener('keydown', onMapPinKeydown);
+  mainPin.addEventListener('mousedown', onMapPinMousedown);
+  mainPin.addEventListener('keydown', onMapPinKeydown);
 
   /* Обработчики событий */
   /** @function
@@ -24,12 +24,13 @@
    * @param {event} evt
    */
   function onMapPinMousedown(evt) {
-    if (evt.which === window.util.KeysClick.LEFT_MOUSE) {
+    if (evt.which === window.utils.KeysClick.LEFT_MOUSE) {
       pageDisabled(false);
-      mapPinMain.removeEventListener('mousedown', onMapPinMousedown);
-      mapPinMain.removeEventListener('keydown', onMapPinKeydown);
+      mainPin.removeEventListener('mousedown', onMapPinMousedown);
+      mainPin.removeEventListener('keydown', onMapPinKeydown);
       adFormReset.addEventListener('mousedown', onStartStateMousedown);
       adFormReset.addEventListener('keydown', onStartStateKeydown);
+      mainPin.addEventListener('mousedown', window.map.onPinMainMousedown);
     }
   }
 
@@ -39,12 +40,13 @@
    * @param {event} evt
    */
   function onMapPinKeydown(evt) {
-    if (evt.key === window.util.KeysClick.ENTER) {
+    if (evt.key === window.utils.KeysClick.ENTER) {
       pageDisabled(false);
-      mapPinMain.removeEventListener('mousedown', onMapPinMousedown);
-      mapPinMain.removeEventListener('keydown', onMapPinKeydown);
+      mainPin.removeEventListener('mousedown', onMapPinMousedown);
+      mainPin.removeEventListener('keydown', onMapPinKeydown);
       adFormReset.addEventListener('mousedown', onStartStateMousedown);
       adFormReset.addEventListener('keydown', onStartStateKeydown);
+      mainPin.addEventListener('mousedown', window.map.onPinMainMousedown);
     }
   }
 
@@ -54,13 +56,14 @@
    * @param {event} evt
    */
   function onStartStateMousedown(evt) {
-    if (evt.which === window.util.KeysClick.LEFT_MOUSE) {
+    if (evt.which === window.utils.KeysClick.LEFT_MOUSE) {
       pageDisabled(true);
       advertisements = null;
       adFormReset.removeEventListener('mousedown', onStartStateMousedown);
       adFormReset.removeEventListener('keydown', onStartStateKeydown);
-      mapPinMain.addEventListener('mousedown', onMapPinMousedown);
-      mapPinMain.addEventListener('keydown', onMapPinKeydown);
+      mainPin.removeEventListener('mousedown', window.map.onPinMainMousedown);
+      mainPin.addEventListener('mousedown', onMapPinMousedown);
+      mainPin.addEventListener('keydown', onMapPinKeydown);
     }
   }
 
@@ -70,13 +73,14 @@
    * @param {event} evt
    */
   function onStartStateKeydown(evt) {
-    if (evt.key === window.util.KeysClick.ENTER) {
+    if (evt.key === window.utils.KeysClick.ENTER) {
       pageDisabled(true);
       advertisements = null;
       adFormReset.removeEventListener('mousedown', onStartStateMousedown);
       adFormReset.removeEventListener('keydown', onStartStateKeydown);
-      mapPinMain.addEventListener('mousedown', onMapPinMousedown);
-      mapPinMain.addEventListener('keydown', onMapPinKeydown);
+      mainPin.removeEventListener('mousedown', window.map.onPinMainMousedown);
+      mainPin.addEventListener('mousedown', onMapPinMousedown);
+      mainPin.addEventListener('keydown', onMapPinKeydown);
     }
   }
 
@@ -104,8 +108,8 @@
           card.remove();
         });
 
-        mapPinMain.addEventListener('mousedown', onMapPinMousedown);
-        mapPinMain.addEventListener('keydown', onMapPinKeydown);
+        mainPin.addEventListener('mousedown', onMapPinMousedown);
+        mainPin.addEventListener('keydown', onMapPinKeydown);
         break;
       case false:
         window.form.disabling(state);
@@ -116,8 +120,8 @@
         advertisements = window.mock.createAdvertisements(COUNT_ADVERTISEMENTS);
         window.pin.render(advertisements);
 
-        mapPinMain.removeEventListener('mousedown', onMapPinMousedown);
-        mapPinMain.removeEventListener('keydown', onMapPinKeydown);
+        mainPin.removeEventListener('mousedown', onMapPinMousedown);
+        mainPin.removeEventListener('keydown', onMapPinKeydown);
         break;
     }
   }
