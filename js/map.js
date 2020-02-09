@@ -25,6 +25,11 @@
   mainPin.addEventListener('mousedown', onPinMainMousedown);
 
   /* Обработчики событий */
+  /** @function
+   * @name onPinMainMousedown
+   * @description Реализует перемищение главного пина по карте, и запись текущих координат в адрес
+   * @param {event} evt
+   */
   function onPinMainMousedown(evt) {
 
     var startCoordinates = {

@@ -7,6 +7,7 @@
   var adForm = document.querySelector('.ad-form');
   var adFormAddress = adForm.querySelector('#address');
   var adFormFieldset = adForm.querySelectorAll('fieldset');
+  var roomSelect = adForm.querySelector('#room_number');
   var capSelect = adForm.querySelector('#capacity');
   var capOptions = capSelect.querySelectorAll('option');
   var StartAddress = {
@@ -44,9 +45,13 @@
         });
 
         capOptions.forEach(function (option) {
-          option.disabled = true;
-          option.selected = false;
-          option.removeAttribute('selected');
+          if (option.value !== roomSelect.value) {
+            option.disabled = true;
+            option.removeAttribute('selected');
+          } else {
+            option.setAttribute('selected', '');
+          }
+
         });
 
         adFormAddress.removeAttribute('disabled');
@@ -79,7 +84,7 @@
 
   /** @function
    * @name checkHousingType
-   * @description выставляет ограничивает минимальную цену, согласно типа жилья
+   * @description выставляет минимальную цену, согласно типа жилья
    * @param {*} evt
    */
   function checkHousingType(evt) {
@@ -117,7 +122,7 @@
 
   /** @function
    * @name checkRooms
-   * @description выстовляет соответствие между колличеством комнат, и возможного размещения гостей
+   * @description выстовляет соответствие между колличеством комнат, и возможного колличества гостей
    * @param {*} evt
    */
   function checkRooms(evt) {
@@ -132,7 +137,6 @@
 
     capOptions.forEach(function (option) {
       option.disabled = true;
-      option.selected = false;
       option.removeAttribute('selected');
     });
 
@@ -142,7 +146,6 @@
   }
 
   window.form = {
-    disabling: adFormDisabling,
-    onChange: onFormChange
+    disabling: adFormDisabling
   };
 })();

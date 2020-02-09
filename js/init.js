@@ -26,11 +26,7 @@
   function onMapPinMousedown(evt) {
     if (evt.which === window.utils.KeysClick.LEFT_MOUSE) {
       pageDisabled(false);
-      mainPin.removeEventListener('mousedown', onMapPinMousedown);
-      mainPin.removeEventListener('keydown', onMapPinKeydown);
-      adFormReset.addEventListener('mousedown', onStartStateMousedown);
-      adFormReset.addEventListener('keydown', onStartStateKeydown);
-      mainPin.addEventListener('mousedown', window.map.onPinMainMousedown);
+      mapActivateListener();
     }
   }
 
@@ -42,11 +38,7 @@
   function onMapPinKeydown(evt) {
     if (evt.key === window.utils.KeysClick.ENTER) {
       pageDisabled(false);
-      mainPin.removeEventListener('mousedown', onMapPinMousedown);
-      mainPin.removeEventListener('keydown', onMapPinKeydown);
-      adFormReset.addEventListener('mousedown', onStartStateMousedown);
-      adFormReset.addEventListener('keydown', onStartStateKeydown);
-      mainPin.addEventListener('mousedown', window.map.onPinMainMousedown);
+      mapActivateListener();
     }
   }
 
@@ -58,12 +50,7 @@
   function onStartStateMousedown(evt) {
     if (evt.which === window.utils.KeysClick.LEFT_MOUSE) {
       pageDisabled(true);
-      advertisements = null;
-      adFormReset.removeEventListener('mousedown', onStartStateMousedown);
-      adFormReset.removeEventListener('keydown', onStartStateKeydown);
-      mainPin.removeEventListener('mousedown', window.map.onPinMainMousedown);
-      mainPin.addEventListener('mousedown', onMapPinMousedown);
-      mainPin.addEventListener('keydown', onMapPinKeydown);
+      mapDisableListener();
     }
   }
 
@@ -75,13 +62,25 @@
   function onStartStateKeydown(evt) {
     if (evt.key === window.utils.KeysClick.ENTER) {
       pageDisabled(true);
-      advertisements = null;
-      adFormReset.removeEventListener('mousedown', onStartStateMousedown);
-      adFormReset.removeEventListener('keydown', onStartStateKeydown);
-      mainPin.removeEventListener('mousedown', window.map.onPinMainMousedown);
-      mainPin.addEventListener('mousedown', onMapPinMousedown);
-      mainPin.addEventListener('keydown', onMapPinKeydown);
+      mapDisableListener();
     }
+  }
+
+  function mapActivateListener() {
+    mainPin.removeEventListener('mousedown', onMapPinMousedown);
+    mainPin.removeEventListener('keydown', onMapPinKeydown);
+    adFormReset.addEventListener('mousedown', onStartStateMousedown);
+    adFormReset.addEventListener('keydown', onStartStateKeydown);
+    mainPin.addEventListener('mousedown', window.map.onPinMainMousedown);
+  }
+
+  function mapDisableListener() {
+    advertisements = null;
+    adFormReset.removeEventListener('mousedown', onStartStateMousedown);
+    adFormReset.removeEventListener('keydown', onStartStateKeydown);
+    mainPin.removeEventListener('mousedown', window.map.onPinMainMousedown);
+    mainPin.addEventListener('mousedown', onMapPinMousedown);
+    mainPin.addEventListener('keydown', onMapPinKeydown);
   }
 
   /* Функции */
