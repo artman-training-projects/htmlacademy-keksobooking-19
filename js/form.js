@@ -9,9 +9,14 @@
   var adFormFieldset = adForm.querySelectorAll('fieldset');
   var capSelect = adForm.querySelector('#capacity');
   var capOptions = capSelect.querySelectorAll('option');
+  var StartAddress = {
+    centerX: Math.round(window.map.MainPin.X_START + window.map.MainPin.WIDTH / 2),
+    centerY: Math.round(window.map.MainPin.Y_START + window.map.MainPin.HEIGHT / 2),
+    pinY: Math.round(window.map.MainPin.Y_START + window.map.MainPin.HEIGHT)
+  };
 
   adFormAddress.setAttribute('disabled', 'disabled');
-  adFormAddress.setAttribute('value', Math.round(window.map.MainPin.X_START + window.map.MainPin.WIDTH / 2) + ', ' + Math.round(window.map.MainPin.Y_START + window.map.MainPin.HEIGHT / 2));
+  adFormAddress.setAttribute('value', StartAddress.centerX + ', ' + StartAddress.centerY);
 
   /** @function
    * @name adFormDisabling
@@ -28,7 +33,8 @@
         });
 
         adForm.removeEventListener('change', onFormChange);
-        adFormAddress.value = Math.round(window.map.MainPin.X_START + window.map.MainPin.WIDTH / 2) + ', ' + Math.round(window.map.MainPin.Y_START + window.map.MainPin.HEIGHT / 2);
+        adFormAddress.setAttribute('value', StartAddress.centerX + ', ' + StartAddress.centerY);
+        adFormAddress.value = StartAddress.centerX + ', ' + StartAddress.centerY;
         break;
       case false:
         adForm.classList.remove('ad-form--disabled');
@@ -45,7 +51,8 @@
 
         adFormAddress.removeAttribute('disabled');
         adForm.addEventListener('change', onFormChange);
-        adFormAddress.value = Math.round(window.map.MainPin.X_START + window.map.MainPin.WIDTH / 2) + ', ' + Math.round(window.map.MainPin.Y_START + window.map.MainPin.HEIGHT);
+        adFormAddress.setAttribute('value', StartAddress.centerX + ', ' + StartAddress.pinY);
+        adFormAddress.value = StartAddress.centerX + ', ' + StartAddress.pinY;
         break;
     }
   }

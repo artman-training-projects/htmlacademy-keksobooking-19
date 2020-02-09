@@ -18,7 +18,6 @@
     Y_START: 375
   };
 
-  var map = document.querySelector('.map__pins');
   var mainPin = document.querySelector('.map__pin--main');
   var adFormAddress = document.querySelector('#address');
 
@@ -27,10 +26,6 @@
 
   /* Обработчики событий */
   function onPinMainMousedown(evt) {
-    console.log('staaaaaaaaaaaaaaaart');
-
-    // var startCoordinates = getCoordinates(mainPin);
-    var gapX = map.getBoundingClientRect().x;
 
     var startCoordinates = {
       x: evt.clientX,
@@ -38,7 +33,7 @@
     };
 
     function onPinMainMousemove(moveEvt) {
-      console.log('dvigaem');
+
       var shift = {
         x: startCoordinates.x - moveEvt.clientX,
         y: startCoordinates.y - moveEvt.clientY
@@ -49,37 +44,46 @@
         y: moveEvt.clientY
       };
 
-      mainPin.style.top = (mainPin.offsetTop - shift.y) + 'px';
-      mainPin.style.left = (mainPin.offsetLeft - shift.x) + 'px';
+      var coordY = mainPin.offsetTop - shift.y;
+      var coordX = mainPin.offsetLeft - shift.x;
 
-      console.log(mainPin.style);
+      var left = checkMinMax((Сoordinates.X_MIN - Math.round(MainPin.WIDTH / 2)), (Сoordinates.X_MAX - Math.round(MainPin.WIDTH / 2)), coordX);
+      var top = checkMinMax((Сoordinates.Y_MIN - MainPin.HEIGHT), (Сoordinates.Y_MAX - MainPin.HEIGHT), coordY);
+
+
+      mainPin.style.top = top + 'px';
+      mainPin.style.left = left + 'px';
+
+      adFormAddress.setAttribute('value', (left + Math.round(MainPin.WIDTH / 2)) + ', ' + (top + MainPin.HEIGHT));
+      adFormAddress.value = (left + Math.round(MainPin.WIDTH / 2)) + ', ' + (top + MainPin.HEIGHT);
     }
 
     function onPinMainMouseup() {
-      console.log('otpuskaem');
-      mainPin.removeEventListener('mousemove', onPinMainMousemove);
-      mainPin.removeEventListener('mouseup', onPinMainMouseup);
+      document.removeEventListener('mousemove', onPinMainMousemove);
+      document.removeEventListener('mouseup', onPinMainMouseup);
     }
 
-    mainPin.addEventListener('mousemove', onPinMainMousemove);
-    mainPin.addEventListener('mouseup', onPinMainMouseup);
+    document.addEventListener('mousemove', onPinMainMousemove);
+    document.addEventListener('mouseup', onPinMainMouseup);
   }
 
   /* Функции */
   /** @function
-   * @name getCoordinates
-   * @description вычиляет координаты элемента top left, относительно body
-   * @param {*} element DOM-элемент
-   * @return {object} возвращает координаты top и left
+   * @name checkMinMax
+   * @description Проверят число, в пределах min - max
+   * @param {number} min ограничивает диапазон снизу
+   * @param {number} max ограничивает диапазон сверху
+   * @param {number} current текущее число
+   * @return {number} возвращает число, в рамках min - max
    */
-  function getCoordinates(element) {
-    var maps = map.getBoundingClientRect();
-    var pin = element.getBoundingClientRect();
-
-    return {
-      left: pin.left + pageXOffset - maps.x,
-      top: pin.top + pageYOffset
-    };
+  function checkMinMax(min, max, current) {
+    if (current < min) {
+      return min;
+    } else if (current > max) {
+      return max;
+    } else {
+      return current;
+    }
   }
 
   window.map = {
