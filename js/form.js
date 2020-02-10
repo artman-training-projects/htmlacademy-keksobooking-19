@@ -8,8 +8,10 @@
   var adFormAddress = adForm.querySelector('#address');
   var adFormFieldset = adForm.querySelectorAll('fieldset');
   var roomSelect = adForm.querySelector('#room_number');
+  var roomOptions = adForm.querySelectorAll('option');
   var capSelect = adForm.querySelector('#capacity');
   var capOptions = capSelect.querySelectorAll('option');
+
   var StartAddress = {
     centerX: Math.round(window.map.MainPin.X_START + window.map.MainPin.WIDTH / 2),
     centerY: Math.round(window.map.MainPin.Y_START + window.map.MainPin.HEIGHT / 2),
@@ -42,6 +44,10 @@
 
         adFormFieldset.forEach(function (fieldset) {
           fieldset.removeAttribute('disabled');
+        });
+
+        roomOptions.forEach(function (option) {
+          option.removeAttribute('selected');
         });
 
         capOptions.forEach(function (option) {
