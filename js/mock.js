@@ -4,6 +4,8 @@
 'use strict';
 
 (function () {
+  var Utils = window.utils;
+
   var PHOTOS = ['http://o0.github.io/assets/images/tokyo/hotel1.jpg', 'http://o0.github.io/assets/images/tokyo/hotel2.jpg', 'http://o0.github.io/assets/images/tokyo/hotel3.jpg'];
   var CHECK_TIMES = ['12:00', '13:00', '14:00'];
 
@@ -52,17 +54,17 @@
    */
   function createRandomAdvertisement(i) {
     var location = {
-      x: window.utils.getRandomMinMax(Сoordinates.X_MIN, Сoordinates.X_MAX),
-      y: window.utils.getRandomMinMax(Сoordinates.Y_MIN, Сoordinates.Y_MAX)
+      x: Utils.getRandomMinMax(Сoordinates.X_MIN, Сoordinates.X_MAX),
+      y: Utils.getRandomMinMax(Сoordinates.Y_MIN, Сoordinates.Y_MAX)
     };
-    var price = window.utils.getRandomMinMax(Price.MIN, Price.MAX);
-    var type = Object.keys(Type)[window.utils.getRandomIndexFromArray(Object.keys(Type))];
-    var features = window.utils.getRandomElementsFromArray(Object.keys(Features), window.utils.getRandomIndexFromArray(Object.keys(Features)));
+    var price = Utils.getRandomMinMax(Price.MIN, Price.MAX);
+    var type = Object.keys(Type)[Utils.getRandomIndexFromArray(Object.keys(Type))];
+    var features = Utils.getRandomElementsFromArray(Object.keys(Features), Utils.getRandomIndexFromArray(Object.keys(Features)));
     features.forEach(function (feature, index) {
       var temp = feature.toLowerCase();
       features[index] = temp;
     });
-    var photos = window.utils.getRandomElementsFromArray(PHOTOS, window.utils.getRandomIndexFromArray(PHOTOS));
+    var photos = Utils.getRandomElementsFromArray(PHOTOS, Utils.getRandomIndexFromArray(PHOTOS));
 
     var advert = {
       author: {
@@ -73,10 +75,10 @@
         address: location.x + ', ' + location.y,
         price: price,
         type: type.toLowerCase(),
-        rooms: window.utils.getRandomMinMax(Rooms.MIN, Rooms.MAX),
-        guests: window.utils.getRandomMinMax(Guests.MIN, Guests.MAX),
-        checkin: CHECK_TIMES[window.utils.getRandomIndexFromArray(CHECK_TIMES)],
-        checkout: CHECK_TIMES[window.utils.getRandomIndexFromArray(CHECK_TIMES)],
+        rooms: Utils.getRandomMinMax(Rooms.MIN, Rooms.MAX),
+        guests: Utils.getRandomMinMax(Guests.MIN, Guests.MAX),
+        checkin: CHECK_TIMES[Utils.getRandomIndexFromArray(CHECK_TIMES)],
+        checkout: CHECK_TIMES[Utils.getRandomIndexFromArray(CHECK_TIMES)],
         features: features,
         description: Type[type] + ' за ' + price + '₽/ночь отличный вариант',
         photos: photos

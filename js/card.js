@@ -4,6 +4,8 @@
 'use strict';
 
 (function () {
+  var Utils = window.utils;
+
   var map = document.querySelector('.map');
   var templateCard = document.querySelector('#card').content.querySelector('.map__card');
 
@@ -68,7 +70,7 @@
 
     /* Обработчики событий */
     function onPopupCloseMousedown(evt) {
-      if (evt.which === window.utils.KeysClick.LEFT_MOUSE) {
+      if (evt.which === Utils.KeysClick.LEFT_MOUSE) {
         advertCard.remove();
         popupClose.removeEventListener('mousedown', onPopupCloseMousedown);
         document.removeEventListener('keydown', onPopupCloseKeydown);
@@ -76,7 +78,7 @@
     }
 
     function onPopupCloseKeydown(evt) {
-      if (evt.key === window.utils.KeysClick.ESCAPE) {
+      if (evt.key === Utils.KeysClick.ESCAPE) {
         advertCard.remove();
         popupClose.removeEventListener('mousedown', onPopupCloseMousedown);
         document.removeEventListener('keydown', onPopupCloseKeydown);

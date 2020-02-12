@@ -4,6 +4,8 @@
 'use strict';
 
 (function () {
+  var Mapp = window.map;
+
   var adForm = document.querySelector('.ad-form');
   var adFormAddress = adForm.querySelector('#address');
   var adFormFieldset = adForm.querySelectorAll('fieldset');
@@ -13,9 +15,9 @@
   var capOptions = capSelect.querySelectorAll('option');
 
   var StartAddress = {
-    centerX: Math.round(window.map.MainPin.X_START + window.map.MainPin.WIDTH / 2),
-    centerY: Math.round(window.map.MainPin.Y_START + window.map.MainPin.HEIGHT / 2),
-    pinY: Math.round(window.map.MainPin.Y_START + window.map.MainPin.HEIGHT)
+    centerX: Math.round(Mapp.MainPin.X_START + Mapp.MainPin.WIDTH / 2),
+    centerY: Math.round(Mapp.MainPin.Y_START + Mapp.MainPin.HEIGHT / 2),
+    pinY: Math.round(Mapp.MainPin.Y_START + Mapp.MainPin.HEIGHT)
   };
 
   adFormAddress.setAttribute('disabled', 'disabled');
