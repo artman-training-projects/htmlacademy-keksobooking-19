@@ -134,7 +134,7 @@
   function checkRooms(evt) {
     var value = evt.target.value;
 
-    var RoomsCapasity = {
+    var RoomsCapaсity = {
       1: [1],
       2: [1, 2],
       3: [1, 2, 3],
@@ -146,9 +146,9 @@
       option.removeAttribute('selected');
     });
 
-    for (var i = 0; i < RoomsCapasity[value].length; i++) {
-      capSelect.querySelector('option' + '[value="' + RoomsCapasity[value][i] + '"]').disabled = false;
-    }
+    RoomsCapaсity[value].forEach(function (room) {
+      capSelect.querySelector('option' + '[value="' + room + '"]').disabled = false;
+    });
   }
 
   window.form = {

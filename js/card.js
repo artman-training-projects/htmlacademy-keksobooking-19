@@ -64,14 +64,14 @@
 
     /* Слушатели событий */
     popupClose.addEventListener('mousedown', onPopupCloseMousedown);
-    map.addEventListener('keydown', onPopupCloseKeydown);
+    document.addEventListener('keydown', onPopupCloseKeydown);
 
     /* Обработчики событий */
     function onPopupCloseMousedown(evt) {
       if (evt.which === window.utils.KeysClick.LEFT_MOUSE) {
         advertCard.remove();
         popupClose.removeEventListener('mousedown', onPopupCloseMousedown);
-        map.removeEventListener('keydown', onPopupCloseKeydown);
+        document.removeEventListener('keydown', onPopupCloseKeydown);
       }
     }
 
@@ -79,7 +79,7 @@
       if (evt.key === window.utils.KeysClick.ESCAPE) {
         advertCard.remove();
         popupClose.removeEventListener('mousedown', onPopupCloseMousedown);
-        map.removeEventListener('keydown', onPopupCloseKeydown);
+        document.removeEventListener('keydown', onPopupCloseKeydown);
       }
     }
 
@@ -92,10 +92,7 @@
    * @param {number} card массив объявлений
    */
   function renderCard(card) {
-    var fragment = document.createDocumentFragment();
-    fragment.appendChild(makeCard(card));
-
-    map.querySelector('.map__filters-container').before(fragment);
+    map.querySelector('.map__filters-container').before(makeCard(card));
   }
 
   window.card = {
