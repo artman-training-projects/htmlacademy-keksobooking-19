@@ -6,10 +6,9 @@
 (function () {
   var KeysClick = {
     ENTER: 'Enter',
+    ESCAPE: 'Escape',
     LEFT_MOUSE: 1
   };
-
-  var map = document.querySelector('.map');
 
   /** @function
    * @name getRandomMinMax
@@ -47,27 +46,10 @@
     return newArray;
   }
 
-  /** @function
-   * @name getCoordinates
-   * @description вычиляет координаты элемента top left, относительно body
-   * @param {*} element DOM-элемент
-   * @return {object} возвращает координаты top и left
-   */
-  function getCoordinates(element) {
-    var maps = map.getBoundingClientRect();
-    var pin = element.getBoundingClientRect();
-
-    return {
-      left: pin.left + pageXOffset - maps.x,
-      top: pin.top + pageYOffset
-    };
-  }
-
-  window.util = {
+  window.utils = {
     KeysClick: KeysClick,
     getRandomMinMax: getRandomMinMax,
     getRandomIndexFromArray: getRandomIndexFromArray,
-    getRandomElementsFromArray: getRandomElementsFromArray,
-    getCoordinates: getCoordinates
+    getRandomElementsFromArray: getRandomElementsFromArray
   };
 })();

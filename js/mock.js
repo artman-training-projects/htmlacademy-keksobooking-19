@@ -52,17 +52,17 @@
    */
   function createRandomAdvertisement(i) {
     var location = {
-      x: window.util.getRandomMinMax(Сoordinates.X_MIN, Сoordinates.X_MAX),
-      y: window.util.getRandomMinMax(Сoordinates.Y_MIN, Сoordinates.Y_MAX)
+      x: window.utils.getRandomMinMax(Сoordinates.X_MIN, Сoordinates.X_MAX),
+      y: window.utils.getRandomMinMax(Сoordinates.Y_MIN, Сoordinates.Y_MAX)
     };
-    var price = window.util.getRandomMinMax(Price.MIN, Price.MAX);
-    var type = Object.keys(Type)[window.util.getRandomIndexFromArray(Object.keys(Type))];
-    var features = window.util.getRandomElementsFromArray(Object.keys(Features), window.util.getRandomIndexFromArray(Object.keys(Features)));
+    var price = window.utils.getRandomMinMax(Price.MIN, Price.MAX);
+    var type = Object.keys(Type)[window.utils.getRandomIndexFromArray(Object.keys(Type))];
+    var features = window.utils.getRandomElementsFromArray(Object.keys(Features), window.utils.getRandomIndexFromArray(Object.keys(Features)));
     features.forEach(function (feature, index) {
       var temp = feature.toLowerCase();
       features[index] = temp;
     });
-    var photos = window.util.getRandomElementsFromArray(PHOTOS, window.util.getRandomIndexFromArray(PHOTOS));
+    var photos = window.utils.getRandomElementsFromArray(PHOTOS, window.utils.getRandomIndexFromArray(PHOTOS));
 
     var advert = {
       author: {
@@ -73,10 +73,10 @@
         address: location.x + ', ' + location.y,
         price: price,
         type: type.toLowerCase(),
-        rooms: window.util.getRandomMinMax(Rooms.MIN, Rooms.MAX),
-        guests: window.util.getRandomMinMax(Guests.MIN, Guests.MAX),
-        checkin: CHECK_TIMES[window.util.getRandomIndexFromArray(CHECK_TIMES)],
-        checkout: CHECK_TIMES[window.util.getRandomIndexFromArray(CHECK_TIMES)],
+        rooms: window.utils.getRandomMinMax(Rooms.MIN, Rooms.MAX),
+        guests: window.utils.getRandomMinMax(Guests.MIN, Guests.MAX),
+        checkin: CHECK_TIMES[window.utils.getRandomIndexFromArray(CHECK_TIMES)],
+        checkout: CHECK_TIMES[window.utils.getRandomIndexFromArray(CHECK_TIMES)],
         features: features,
         description: Type[type] + ' за ' + price + '₽/ночь отличный вариант',
         photos: photos
@@ -87,11 +87,11 @@
   }
 
   /** @function
-   * @name createAdvertisementArray
+   * @name createAdvertisements
    * @param {number} count колличество создоваеммых объявлений
    * @return {array} возвращает массив созданных объявлений
    */
-  function createAdvertisementArray(count) {
+  function createAdvertisements(count) {
     var advertisementArray = [];
     for (var i = 0; i < count; i++) {
       advertisementArray.push(createRandomAdvertisement(i + 1));
@@ -100,6 +100,6 @@
   }
 
   window.mock = {
-    createAdvertisementArray: createAdvertisementArray
+    createAdvertisements: createAdvertisements
   };
 })();

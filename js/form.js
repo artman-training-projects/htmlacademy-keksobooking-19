@@ -7,12 +7,25 @@
   var adForm = document.querySelector('.ad-form');
   var adFormAddress = adForm.querySelector('#address');
   var adFormFieldset = adForm.querySelectorAll('fieldset');
+  var roomSelect = adForm.querySelector('#room_number');
+  var roomOptions = adForm.querySelectorAll('option');
+  var capSelect = adForm.querySelector('#capacity');
+  var capOptions = capSelect.querySelectorAll('option');
+
+  var StartAddress = {
+    centerX: Math.round(window.map.MainPin.X_START + window.map.MainPin.WIDTH / 2),
+    centerY: Math.round(window.map.MainPin.Y_START + window.map.MainPin.HEIGHT / 2),
+    pinY: Math.round(window.map.MainPin.Y_START + window.map.MainPin.HEIGHT)
+  };
 
   adFormAddress.setAttribute('disabled', 'disabled');
-  adFormAddress.setAttribute('value', Math.round(window.map.MainPin.X_START + window.map.MainPin.WIDTH / 2) + ', ' + Math.round(window.map.MainPin.Y_START + window.map.MainPin.HEIGHT / 2));
+  adFormAddress.setAttribute('value', StartAddress.centerX + ', ' + StartAddress.centerY);
 
-  adForm.addEventListener('change', onFormChange);
-
+  /** @function
+   * @name adFormDisabling
+   * @description откл/вкл формы
+   * @param {boolean} state true - отключение формы, false - включение формы
+   */
   function adFormDisabling(state) {
     switch (state) {
       case true:
@@ -21,7 +34,10 @@
         adFormFieldset.forEach(function (fieldset) {
           fieldset.setAttribute('disabled', 'disabled');
         });
-        adFormAddress.setAttribute('value', Math.round(window.map.MainPin.X_START + window.map.MainPin.WIDTH / 2) + ', ' + Math.round(window.map.MainPin.Y_START + window.map.MainPin.HEIGHT / 2));
+
+        adForm.removeEventListener('change', onFormChange);
+        adFormAddress.setAttribute('value', StartAddress.centerX + ', ' + StartAddress.centerY);
+        adFormAddress.value = StartAddress.centerX + ', ' + StartAddress.centerY;
         break;
       case false:
         adForm.classList.remove('ad-form--disabled');
@@ -30,8 +46,24 @@
           fieldset.removeAttribute('disabled');
         });
 
-        adFormAddress.setAttribute('disabled', 'disabled');
-        adFormAddress.setAttribute('value', Math.round(window.map.MainPin.X_START + window.map.MainPin.WIDTH / 2) + ', ' + Math.round(window.map.MainPin.Y_START + window.map.MainPin.HEIGHT));
+        roomOptions.forEach(function (option) {
+          option.removeAttribute('selected');
+        });
+
+        capOptions.forEach(function (option) {
+          if (option.value !== roomSelect.value) {
+            option.disabled = true;
+            option.removeAttribute('selected');
+          } else {
+            option.setAttribute('selected', '');
+          }
+
+        });
+
+        adFormAddress.removeAttribute('disabled');
+        adForm.addEventListener('change', onFormChange);
+        adFormAddress.setAttribute('value', StartAddress.centerX + ', ' + StartAddress.pinY);
+        adFormAddress.value = StartAddress.centerX + ', ' + StartAddress.pinY;
         break;
     }
   }
@@ -42,37 +74,37 @@
    * @param {event} evt
    */
   function onFormChange(evt) {
-    checkHousingType(evt);
-    checkTime(evt);
-    checkRooms(evt);
+    switch (evt.target.id) {
+      case 'type':
+        checkHousingType(evt);
+        break;
+      case 'timein':
+      case 'timeout':
+        checkTime(evt);
+        break;
+      case 'room_number':
+        checkRooms(evt);
+        break;
+    }
   }
 
   /** @function
    * @name checkHousingType
-   * @description выставляет ограничивает минимальную цену, согласно типа жилья
+   * @description выставляет минимальную цену, согласно типа жилья
    * @param {*} evt
    */
   function checkHousingType(evt) {
     var price = adForm.querySelector('#price');
 
-    switch (evt.target.value) {
-      case 'bungalo':
-        price.setAttribute('min', '0');
-        price.placeholder = 0;
-        break;
-      case 'flat':
-        price.setAttribute('min', '1000');
-        price.placeholder = 1000;
-        break;
-      case 'house':
-        price.setAttribute('min', '5000');
-        price.placeholder = 5000;
-        break;
-      case 'palace':
-        price.min = 10000;
-        price.placeholder = 10000;
-        break;
-    }
+    var HousePrice = {
+      bungalo: 0,
+      flat: 1000,
+      house: 5000,
+      palace: 10000
+    };
+
+    price.setAttribute('min', HousePrice[evt.target.value]);
+    price.placeholder = HousePrice[evt.target.value];
   }
 
   /** @function
@@ -81,65 +113,45 @@
    * @param {*} evt
    */
   function checkTime(evt) {
-    var checkin = adForm.querySelector('#timein');
-    var checkout = adForm.querySelector('#timeout');
+    var timein = adForm.querySelector('#timein');
+    var timeout = adForm.querySelector('#timeout');
 
-    switch (evt.target.value) {
-      case '12:00':
-        checkin.value = '12:00';
-        checkout.value = '12:00';
+    switch (evt.target) {
+      case timein:
+        timeout.value = evt.target.value;
         break;
-      case '13:00':
-        checkin.value = '13:00';
-        checkout.value = '13:00';
-        break;
-      case '14:00':
-        checkin.value = '14:00';
-        checkout.value = '14:00';
+      case timeout:
+        timein.value = evt.target.value;
         break;
     }
   }
 
   /** @function
    * @name checkRooms
-   * @description выстовляет соответствие между колличеством комнат, и возможного размещения гостей
+   * @description выстовляет соответствие между колличеством комнат, и возможного колличества гостей
    * @param {*} evt
    */
   function checkRooms(evt) {
-    var rooms = adForm.querySelector('#room_number');
-    var capacity = adForm.querySelector('#capacity');
+    var value = evt.target.value;
 
-    if (evt.target === rooms) {
-      switch (evt.target.value) {
-        case '1':
-          capacity[0].setAttribute('disabled', 'disabled');
-          capacity[1].setAttribute('disabled', 'disabled');
-          capacity[2].removeAttribute('disabled');
-          capacity[3].setAttribute('disabled', 'disabled');
-          break;
-        case '2':
-          capacity[0].setAttribute('disabled', 'disabled');
-          capacity[1].removeAttribute('disabled');
-          capacity[2].removeAttribute('disabled');
-          capacity[3].setAttribute('disabled', 'disabled');
-          break;
-        case '3':
-          capacity[0].removeAttribute('disabled');
-          capacity[1].removeAttribute('disabled');
-          capacity[2].removeAttribute('disabled');
-          capacity[3].setAttribute('disabled', 'disabled');
-          break;
-        case '100':
-          capacity[0].setAttribute('disabled', 'disabled');
-          capacity[1].setAttribute('disabled', 'disabled');
-          capacity[2].setAttribute('disabled', 'disabled');
-          capacity[3].removeAttribute('disabled');
-          break;
-      }
+    var RoomsCapasity = {
+      1: [1],
+      2: [1, 2],
+      3: [1, 2, 3],
+      100: [0]
+    };
+
+    capOptions.forEach(function (option) {
+      option.disabled = true;
+      option.removeAttribute('selected');
+    });
+
+    for (var i = 0; i < RoomsCapasity[value].length; i++) {
+      capSelect.querySelector('option' + '[value="' + RoomsCapasity[value][i] + '"]').disabled = false;
     }
   }
 
   window.form = {
-    adFormDisabling: adFormDisabling
+    disabling: adFormDisabling
   };
 })();
