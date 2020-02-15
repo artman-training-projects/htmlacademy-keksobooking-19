@@ -6,18 +6,19 @@
 (function () {
   var Form = window.form;
   var Pin = window.pin;
-  var Mock = window.mock;
+  // var Mock = window.mock;
+  var Backend = window.backend;
   var Utils = window.utils;
   var Mapp = window.map;
 
-  var COUNT_ADVERTISEMENTS = 8;
+  // var COUNT_ADVERTISEMENTS = 8;
   var map = document.querySelector('.map');
   var mainPin = document.querySelector('.map__pin--main');
 
   var adForm = document.querySelector('.ad-form');
   var adFormReset = document.querySelector('.ad-form__reset');
 
-  var advertisements = Mock.createAdvertisements(COUNT_ADVERTISEMENTS);
+  // var advertisements = Mock.createAdvertisements(COUNT_ADVERTISEMENTS);
 
   /* Слушатели событий */
   mainPin.addEventListener('mousedown', onMapPinMousedown);
@@ -81,7 +82,7 @@
   }
 
   function mapDisableListener() {
-    advertisements = null;
+    // advertisements = null;
     adFormReset.removeEventListener('mousedown', onStartStateMousedown);
     adFormReset.removeEventListener('keydown', onStartStateKeydown);
     mainPin.removeEventListener('mousedown', Mapp.onPinMainMousedown);
@@ -122,8 +123,9 @@
         map.classList.remove('map--faded');
         adForm.classList.remove('ad-form--disabled');
 
-        advertisements = Mock.createAdvertisements(COUNT_ADVERTISEMENTS);
-        Pin.render(advertisements);
+        // advertisements = Mock.createAdvertisements(COUNT_ADVERTISEMENTS);
+        // Pin.render(advertisements);
+        Backend.dataLoad(Pin.render, Backend.error);
 
         mainPin.removeEventListener('mousedown', onMapPinMousedown);
         mainPin.removeEventListener('keydown', onMapPinKeydown);
