@@ -71,18 +71,20 @@
     /* Обработчики событий */
     function onPopupCloseMousedown(evt) {
       if (evt.which === Utils.KeysClick.LEFT_MOUSE) {
-        advertCard.remove();
-        popupClose.removeEventListener('mousedown', onPopupCloseMousedown);
-        document.removeEventListener('keydown', onPopupCloseKeydown);
+        removeCard();
       }
     }
 
     function onPopupCloseKeydown(evt) {
       if (evt.key === Utils.KeysClick.ESCAPE) {
-        advertCard.remove();
-        popupClose.removeEventListener('mousedown', onPopupCloseMousedown);
-        document.removeEventListener('keydown', onPopupCloseKeydown);
+        removeCard();
       }
+    }
+
+    function removeCard() {
+      advertCard.remove();
+      popupClose.removeEventListener('mousedown', onPopupCloseMousedown);
+      document.removeEventListener('keydown', onPopupCloseKeydown);
     }
 
     return advertCard;

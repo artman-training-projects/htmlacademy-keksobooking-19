@@ -4,7 +4,7 @@
 'use strict';
 
 (function () {
-  var URL = 'https://js.dump.academy/keksobooking/dat';
+  var URL = 'https://js.dump.academy/keksobooking/data';
   var statusHTML = {
     OK: 200
   };
