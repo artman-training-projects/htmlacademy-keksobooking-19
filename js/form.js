@@ -157,11 +157,14 @@
 
   function onFormSubmit(evt) {
     Backend.dataPush(new FormData(adForm), function (responce) {
-
+      if (responce) {
+        window.init.pageDisabled(true);
+        Backend.messageSuccess();
+      } else {
+        Backend.messageError();
+      }
     });
     evt.preventDefault();
-
-    window.init.pageDisabled(true);
   }
 
   window.form = {

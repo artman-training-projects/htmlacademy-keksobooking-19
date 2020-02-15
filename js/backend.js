@@ -4,9 +4,11 @@
 'use strict';
 
 (function () {
+  var Utils = window.utils;
+
   var Url = {
     LOAD: 'https://js.dump.academy/keksobooking/data',
-    PUSH: 'https://js.dump.academy/keksobooking'
+    PUSH: 'https://js.dump.academy/keksobookin'
   };
 
   var statusHTML = {
@@ -56,16 +58,61 @@
   }
 
   function onError(message) {
-    var templateError = document.querySelector('#error').content.querySelector('.error');
-    var messageError = templateError.cloneNode(true);
-    messageError.querySelector('.error__message').textContent = message;
-    document.body.appendChild(messageError);
+    var error = document.createElement('div');
+    error.textContent = message;
+    error.style = 'position: absolute; top: 0; left:0; right: 0; text-align: center; font-size: 30px; color: rgb(200, 200, 0); background-color: rgba(0, 0, 0, 0.6); ';
+    document.body.appendChild(error);
+  }
+
+  function messageSuccess() {
+    var template = document.querySelector('#success').content.querySelector('.success').cloneNode(true);
+    template.id = 'message';
+    document.body.querySelector('main').appendChild(template);
+
+    document.addEventListener('mousedown', onMessageCloseMousedown);
+    document.addEventListener('keydown', onMessageCloseKeydown);
+  }
+
+  function messageError() {
+    var template = document.querySelector('#error').content.querySelector('.error').cloneNode(true);
+    template.id = 'message';
+    document.body.querySelector('main').appendChild(template);
+
+    document.querySelector('.error__button').addEventListener('click', onMessageCloseClick);
+    document.addEventListener('mousedown', onMessageCloseMousedown);
+    document.addEventListener('keydown', onMessageCloseKeydown);
+  }
+
+  /* Обработчики событий */
+  function onMessageCloseMousedown(evt) {
+    if (evt.which === Utils.KeysClick.LEFT_MOUSE) {
+      removeMessage();
+    }
+  }
+
+  function onMessageCloseKeydown(evt) {
+    if (evt.key === Utils.KeysClick.ESCAPE) {
+      removeMessage();
+    }
+  }
+
+  function onMessageCloseClick(evt) {
+    evt.preventDefault();
+    removeMessage();
+  }
+
+  function removeMessage() {
+    document.querySelector('#message').remove();
+    document.removeEventListener('mousedown', onMessageCloseMousedown);
+    document.removeEventListener('keydown', onMessageCloseKeydown);
   }
 
   window.backend = {
     dataLoad: dataLoad,
     dataPush: dataPush,
     success: onSuccess,
-    error: onError
+    error: onError,
+    messageSuccess: messageSuccess,
+    messageError: messageError
   };
 })();
