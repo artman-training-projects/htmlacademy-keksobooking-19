@@ -132,4 +132,8 @@
         break;
     }
   }
+
+  window.init = {
+    pageDisabled: pageDisabled
+  };
 })();
