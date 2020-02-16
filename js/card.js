@@ -4,11 +4,14 @@
 'use strict';
 
 (function () {
+  var Utils = window.utils;
+
   var map = document.querySelector('.map');
   var templateCard = document.querySelector('#card').content.querySelector('.map__card');
 
   /** @function
    * @name makeCard
+   * @description Создаёт карточку объявления
    * @param {object} advert принимает объявление
    * @return {object} возвращает html-элемент, карточка
    */
@@ -64,23 +67,25 @@
 
     /* Слушатели событий */
     popupClose.addEventListener('mousedown', onPopupCloseMousedown);
-    map.addEventListener('keydown', onPopupCloseKeydown);
+    document.addEventListener('keydown', onPopupCloseKeydown);
 
     /* Обработчики событий */
     function onPopupCloseMousedown(evt) {
-      if (evt.which === window.utils.KeysClick.LEFT_MOUSE) {
-        advertCard.remove();
-        popupClose.removeEventListener('mousedown', onPopupCloseMousedown);
-        map.removeEventListener('keydown', onPopupCloseKeydown);
+      if (evt.which === Utils.KeysClick.LEFT_MOUSE) {
+        removeCard();
       }
     }
 
     function onPopupCloseKeydown(evt) {
-      if (evt.key === window.utils.KeysClick.ESCAPE) {
-        advertCard.remove();
-        popupClose.removeEventListener('mousedown', onPopupCloseMousedown);
-        map.removeEventListener('keydown', onPopupCloseKeydown);
+      if (evt.key === Utils.KeysClick.ESCAPE) {
+        removeCard();
       }
+    }
+
+    function removeCard() {
+      advertCard.remove();
+      popupClose.removeEventListener('mousedown', onPopupCloseMousedown);
+      document.removeEventListener('keydown', onPopupCloseKeydown);
     }
 
     return advertCard;
@@ -88,14 +93,11 @@
 
   /** @function
    * @name renderCard
-   * @description вставляет обявления в разметку
+   * @description Вставляет обявления в разметку
    * @param {number} card массив объявлений
    */
   function renderCard(card) {
-    var fragment = document.createDocumentFragment();
-    fragment.appendChild(makeCard(card));
-
-    map.querySelector('.map__filters-container').before(fragment);
+    map.querySelector('.map__filters-container').before(makeCard(card));
   }
 
   window.card = {
