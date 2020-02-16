@@ -27,7 +27,7 @@
   /* Обработчики событий */
   /** @function
    * @name onMapPinMousedown
-   * @description при нажатии мышкой на пин делает карту активной
+   * @description При нажатии мышкой на пин делает карту активной
    * @param {event} evt
    */
   function onMapPinMousedown(evt) {
@@ -39,7 +39,7 @@
 
   /** @function
    * @name onMapPinKeydown
-   * @description при нажатии мышкой на пин делает карту активной
+   * @description При нажатии мышкой на пин делает карту активной
    * @param {event} evt
    */
   function onMapPinKeydown(evt) {
@@ -51,7 +51,7 @@
 
   /** @function
    * @name onStartStateMousedown
-   * @description при нажатии мышкой на кнопку очистить, переводит страницу в начальное состояние
+   * @description При нажатии мышкой на кнопку очистить, переводит страницу в начальное состояние
    * @param {event} evt
    */
   function onStartStateMousedown(evt) {
@@ -93,7 +93,7 @@
   /* Функции */
   /** @function
    * @name isPageDisabled
-   * @description ауправляет состояние страницы - активна или нет
+   * @description Управляет состояние страницы - активна или нет
    * @param {boolean} state true - страница не активна, false - страница активна
    */
   function pageDisabled(state) {

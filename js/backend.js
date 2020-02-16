@@ -4,17 +4,21 @@
 'use strict';
 
 (function () {
-  var Utils = window.utils;
-
   var Url = {
     LOAD: 'https://js.dump.academy/keksobooking/data',
-    PUSH: 'https://js.dump.academy/keksobookin'
+    PUSH: 'https://js.dump.academy/keksobooking'
   };
 
   var statusHTML = {
     OK: 200
   };
 
+  /** @function
+   * @name dataLoad
+   * @description Получение данных с сервера
+   * @param {function} ifSuccess callback при успешном получении данных
+   * @param {function} ifError callback при ошибке при получении данных
+   */
   function dataLoad(ifSuccess, ifError) {
     var TIMEOUT = 1000;
     var xhr = new XMLHttpRequest();
@@ -41,6 +45,12 @@
     xhr.send();
   }
 
+  /** @function
+   * @name dataPush
+   * @description Отправка данных на сервер
+   * @param {function} data callback при отправке данных
+   * @param {function} ifSuccess callback при успешной отправке данных
+   */
   function dataPush(data, ifSuccess) {
     var xhr = new XMLHttpRequest();
     xhr.responseType = 'json';
@@ -53,10 +63,11 @@
     xhr.send(data);
   }
 
-  function onSuccess(data) {
-    return data;
-  }
-
+  /** @function
+   * @name onError
+   * @description Вывод сообщение об ошибке
+   * @param {*} message
+   */
   function onError(message) {
     var error = document.createElement('div');
     error.textContent = message;
@@ -64,55 +75,9 @@
     document.body.appendChild(error);
   }
 
-  function messageSuccess() {
-    var template = document.querySelector('#success').content.querySelector('.success').cloneNode(true);
-    template.id = 'message';
-    document.body.querySelector('main').appendChild(template);
-
-    document.addEventListener('mousedown', onMessageCloseMousedown);
-    document.addEventListener('keydown', onMessageCloseKeydown);
-  }
-
-  function messageError() {
-    var template = document.querySelector('#error').content.querySelector('.error').cloneNode(true);
-    template.id = 'message';
-    document.body.querySelector('main').appendChild(template);
-
-    document.querySelector('.error__button').addEventListener('click', onMessageCloseClick);
-    document.addEventListener('mousedown', onMessageCloseMousedown);
-    document.addEventListener('keydown', onMessageCloseKeydown);
-  }
-
-  /* Обработчики событий */
-  function onMessageCloseMousedown(evt) {
-    if (evt.which === Utils.KeysClick.LEFT_MOUSE) {
-      removeMessage();
-    }
-  }
-
-  function onMessageCloseKeydown(evt) {
-    if (evt.key === Utils.KeysClick.ESCAPE) {
-      removeMessage();
-    }
-  }
-
-  function onMessageCloseClick(evt) {
-    evt.preventDefault();
-    removeMessage();
-  }
-
-  function removeMessage() {
-    document.querySelector('#message').remove();
-    document.removeEventListener('mousedown', onMessageCloseMousedown);
-    document.removeEventListener('keydown', onMessageCloseKeydown);
-  }
-
   window.backend = {
     dataLoad: dataLoad,
     dataPush: dataPush,
-    success: onSuccess,
-    error: onError,
-    messageSuccess: messageSuccess,
-    messageError: messageError
+    error: onError
   };
 })();

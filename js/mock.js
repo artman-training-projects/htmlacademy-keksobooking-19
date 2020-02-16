@@ -49,6 +49,7 @@
 
   /** @function
    * @name createRandomAdvertisement
+   * @description Создаёт объявление из случайных данных
    * @param {number} i индекс создаваемого объявления
    * @return {object} возвращает объект со случайными данными
    */
@@ -90,6 +91,7 @@
 
   /** @function
    * @name createAdvertisements
+   * @description Создаёт массив объявлений
    * @param {number} count колличество создоваеммых объявлений
    * @return {array} возвращает массив созданных объявлений
    */

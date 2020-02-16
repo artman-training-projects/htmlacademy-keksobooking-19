@@ -11,6 +11,7 @@
 
   /** @function
    * @name makeCard
+   * @description Создаёт карточку объявления
    * @param {object} advert принимает объявление
    * @return {object} возвращает html-элемент, карточка
    */
@@ -92,7 +93,7 @@
 
   /** @function
    * @name renderCard
-   * @description вставляет обявления в разметку
+   * @description Вставляет обявления в разметку
    * @param {number} card массив объявлений
    */
   function renderCard(card) {

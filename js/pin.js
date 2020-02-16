@@ -17,6 +17,7 @@
   /* Функции */
   /** @function
    * @name makePin
+   * @description Создаёт пин для объявления
    * @param {object} advert принимает объявление
    * @return {object} возвращает html-элемент, раположение пина
    */
@@ -53,7 +54,7 @@
 
   /** @function
    * @name renderPins
-   * @description вставляет пины в разметку
+   * @description Вставляет пины в разметку
    * @param {array} pin массив объявлений
    */
   function renderPins(pin) {
