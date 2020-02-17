@@ -8,13 +8,13 @@
   var Pin = window.pin;
   var Backend = window.backend;
   var Utils = window.utils;
-  var Mapp = window.map;
+  var mainMap = window.map;
 
   var map = document.querySelector('.map');
-  var mainPin = document.querySelector('.map__pin--main');
-
+  var mainPin = map.querySelector('.map__pin--main');
   var adForm = document.querySelector('.ad-form');
-  var adFormReset = document.querySelector('.ad-form__reset');
+  var adFormReset = adForm.querySelector('.ad-form__reset');
+  var filterForm = document.querySelector('.map__filters');
 
   /* Слушатели событий */
   mainPin.addEventListener('mousedown', onMapPinMousedown);
@@ -54,6 +54,7 @@
     if (evt.which === Utils.KeysClick.LEFT_MOUSE) {
       pageDisabled(true);
       mapDisableListener();
+      filterForm.style.opacity = 0;
     }
   }
 
@@ -66,6 +67,7 @@
     if (evt.key === Utils.KeysClick.ENTER) {
       pageDisabled(true);
       mapDisableListener();
+      filterForm.style.opacity = 0;
     }
   }
 
@@ -74,14 +76,14 @@
     mainPin.removeEventListener('keydown', onMapPinKeydown);
     adFormReset.addEventListener('mousedown', onStartStateMousedown);
     adFormReset.addEventListener('keydown', onStartStateKeydown);
-    mainPin.addEventListener('mousedown', Mapp.onPinMainMousedown);
+    mainPin.addEventListener('mousedown', mainMap.onPinMainMousedown);
   }
 
   function mapDisableListener() {
     // advertisements = null;
     adFormReset.removeEventListener('mousedown', onStartStateMousedown);
     adFormReset.removeEventListener('keydown', onStartStateKeydown);
-    mainPin.removeEventListener('mousedown', Mapp.onPinMainMousedown);
+    mainPin.removeEventListener('mousedown', mainMap.onPinMainMousedown);
     mainPin.addEventListener('mousedown', onMapPinMousedown);
     mainPin.addEventListener('keydown', onMapPinKeydown);
   }
