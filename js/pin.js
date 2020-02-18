@@ -61,7 +61,9 @@
     var fragment = document.createDocumentFragment();
 
     for (var i = 0; i < maxPins; i++) {
-      fragment.appendChild(makePin(pins[i]));
+      if (pins[i]) {
+        fragment.appendChild(makePin(pins[i]));
+      }
     }
 
     map.querySelector('.map__pins').appendChild(fragment);

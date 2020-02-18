@@ -42,7 +42,6 @@
       card.remove();
     }
 
-    console.log(window.init.defaultAdverts);
     switch (evt.target.id) {
       case 'housing-type':
         filteredHousingType(evt);
@@ -59,10 +58,25 @@
   }
 
   function filteredHousingType(evt) {
-    console.log(evt);
-    console.log(evt.target);
-    console.log(evt.target.value);
-    // Pin.render();
+    var filteredAdverts = window.init.defaultAdverts.filter(function (type) {
+      return type.offer.type === evt.target.value;
+    });
+
+    removeOldPins();
+    window.pin.render(filteredAdverts);
+  }
+
+  /**
+   * @function removeOldPins
+   * @description Удаляет старые пины
+   */
+  function removeOldPins() {
+    var oldPins = document.querySelectorAll('.map__pin');
+    oldPins.forEach(function (pin) {
+      if (!pin.classList.contains('map__pin--main')) {
+        pin.remove();
+      }
+    });
   }
 
   window.filter = {
