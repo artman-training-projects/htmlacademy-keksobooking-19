@@ -4,8 +4,6 @@
 'use strict';
 
 (function () {
-  var Utils = window.utils;
-
   var map = document.querySelector('.map');
   var templateCard = document.querySelector('#card').content.querySelector('.map__card');
 
@@ -71,13 +69,13 @@
 
     /* Обработчики событий */
     function onPopupCloseMousedown(evt) {
-      if (evt.which === Utils.KeysClick.LEFT_MOUSE) {
+      if (evt.which === window.utils.KeysClick.LEFT_MOUSE) {
         removeCard();
       }
     }
 
     function onPopupCloseKeydown(evt) {
-      if (evt.key === Utils.KeysClick.ESCAPE) {
+      if (evt.key === window.utils.KeysClick.ESCAPE) {
         removeCard();
       }
     }

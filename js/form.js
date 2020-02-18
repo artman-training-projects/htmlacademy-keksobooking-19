@@ -4,14 +4,10 @@
 'use strict';
 
 (function () {
-  var mainMap = window.map;
-  var Backend = window.backend;
-  var Utils = window.utils;
-
   var StartAddress = {
-    centerX: Math.round(mainMap.MainPin.X_START + mainMap.MainPin.WIDTH / 2),
-    centerY: Math.round(mainMap.MainPin.Y_START + mainMap.MainPin.HEIGHT / 2),
-    pinY: Math.round(mainMap.MainPin.Y_START + mainMap.MainPin.HEIGHT)
+    centerX: Math.round(window.map.MainPin.X_START + window.map.MainPin.WIDTH / 2),
+    centerY: Math.round(window.map.MainPin.Y_START + window.map.MainPin.HEIGHT / 2),
+    pinY: Math.round(window.map.MainPin.Y_START + window.map.MainPin.HEIGHT)
   };
 
   var typeToPrice = {
@@ -36,7 +32,6 @@
   var roomSelect = adForm.querySelector('#room_number');
   var capSelect = adForm.querySelector('#capacity');
   var capOptions = capSelect.querySelectorAll('option');
-  var filterForm = document.querySelector('.map__filters');
 
   price.setAttribute('min', typeToPrice[typeSelect.value]);
   price.placeholder = typeToPrice[typeSelect.value];
@@ -163,7 +158,7 @@
    * @param {event} evt
    */
   function onFormSubmit(evt) {
-    Backend.dataPush(new FormData(adForm), function (responce) {
+    window.backend.dataPush(new FormData(adForm), function (responce) {
       if (responce) {
         messageSuccess();
       } else {
@@ -180,7 +175,7 @@
       document.addEventListener('mousedown', onMessageCloseMousedown);
       document.addEventListener('keydown', onMessageCloseKeydown);
 
-      filterForm.style.opacity = 1;
+      window.filter.disabled(false);
     }
 
     function messageError() {
@@ -195,13 +190,13 @@
 
     /* Обработчики событий */
     function onMessageCloseMousedown(e) {
-      if (e.which === Utils.KeysClick.LEFT_MOUSE) {
+      if (e.which === window.utils.KeysClick.LEFT_MOUSE) {
         removeMessage();
       }
     }
 
     function onMessageCloseKeydown(e) {
-      if (e.key === Utils.KeysClick.ESCAPE) {
+      if (e.key === window.utils.KeysClick.ESCAPE) {
         removeMessage();
       }
     }
