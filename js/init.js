@@ -73,7 +73,6 @@
   }
 
   function mapDisableListener() {
-    // advertisements = null;
     adFormReset.removeEventListener('mousedown', onStartStateMousedown);
     adFormReset.removeEventListener('keydown', onStartStateKeydown);
     mainPin.removeEventListener('mousedown', window.map.onPinMainMousedown);

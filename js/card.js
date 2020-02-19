@@ -82,7 +82,6 @@
 
     function removeCard() {
       advertCard.remove();
-      popupClose.removeEventListener('mousedown', onPopupCloseMousedown);
       document.removeEventListener('keydown', onPopupCloseKeydown);
     }
 

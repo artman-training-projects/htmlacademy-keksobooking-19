@@ -139,17 +139,17 @@
    * @param {event} evt
    */
   function checkRooms(evt) {
-    var value = evt.target.value;
+    var rooms = roomToCapaсity[evt.target.value];
 
     capOptions.forEach(function (option) {
       option.disabled = true;
       option.selected = false;
     });
 
-    roomToCapaсity[value].forEach(function (room) {
+    rooms.forEach(function (room) {
       capSelect.querySelector('option' + '[value="' + room + '"]').disabled = false;
     });
-    capSelect.querySelector('option' + '[value="' + roomToCapaсity[value][0] + '"]').selected = true;
+    capSelect.querySelector('option' + '[value="' + rooms[0] + '"]').selected = true;
   }
 
   /** @function
