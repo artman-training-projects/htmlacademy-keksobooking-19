@@ -4,21 +4,6 @@
 'use strict';
 
 (function () {
-  var priceToRange = {
-    low: {
-      min: 0,
-      max: 10000
-    },
-    middle: {
-      min: 10000,
-      max: 50000
-    },
-    high: {
-      min: 50000,
-      max: Infinity
-    }
-  };
-
   var filterForm = document.querySelector('.map__filters');
   var filterSelects = filterForm.querySelectorAll('select');
   var housingType = filterForm.querySelector('#housing-type');
@@ -31,7 +16,9 @@
   var advertPrice = housingPrice.value;
   var advertRoom = housingRooms.value;
   var advertGuest = housingGuests.value;
-  var advertFeatures = filterForm.querySelectorAll('input:checked');
+  var advertFeatures = Array.from(filterForm.querySelectorAll('input:checked')).map(function (advert) {
+    return advert.value;
+  });
 
   var filteredAdverts;
 
@@ -60,15 +47,30 @@
     }
 
     filteredAdverts = filteredAdverts.filter(filterType).filter(filterPrice).filter(filterRoom).filter(filterGuest).filter(filterFeatures);
-    updatePins();
-  }
 
+    window.debounce(updatePins);
+  }
 
   function filterType(item) {
     return advertType === 'any' ? true : advertType === item.offer.type;
   }
 
   function filterPrice(item) {
+    var priceToRange = {
+      low: {
+        min: 0,
+        max: 10000
+      },
+      middle: {
+        min: 10000,
+        max: 50000
+      },
+      high: {
+        min: 50000,
+        max: Infinity
+      }
+    };
+
     return advertPrice === 'any' ? true :
       priceToRange[advertPrice].min <= item.offer.price && priceToRange[advertPrice].max >= item.offer.price;
   }
@@ -98,8 +100,6 @@
     if (card) {
       card.remove();
     }
-
-    // console.log(advertType + ' ' + advertPrice + ' ' + advertRooms + ' ' + advertGuests);
 
     removeOldPins();
     window.pin.render(filteredAdverts);
