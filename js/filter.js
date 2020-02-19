@@ -47,15 +47,26 @@
     }
 
     filteredAdverts = filteredAdverts.filter(filterType).filter(filterPrice).filter(filterRoom).filter(filterGuest).filter(filterFeatures);
-
     window.debounce(updatePins);
   }
 
-  function filterType(item) {
-    return advertType === 'any' ? true : advertType === item.offer.type;
+  /**
+   * @function filterType
+   * @description Фильтрация объявлений по типу жилья
+   * @param {object} advert
+   * @return {boolean} если true - возвращает объявление соглано условия
+   */
+  function filterType(advert) {
+    return advertType === 'any' ? true : advertType === advert.offer.type;
   }
 
-  function filterPrice(item) {
+  /**
+   * @function filterPrice
+   * @description Фильтрация объявлений по цене жилья
+   * @param {object} advert
+   * @return {boolean} если true - возвращает объявление соглано условия
+   */
+  function filterPrice(advert) {
     var priceToRange = {
       low: {
         min: 0,
@@ -72,22 +83,40 @@
     };
 
     return advertPrice === 'any' ? true :
-      priceToRange[advertPrice].min <= item.offer.price && priceToRange[advertPrice].max >= item.offer.price;
+      priceToRange[advertPrice].min <= advert.offer.price && priceToRange[advertPrice].max >= advert.offer.price;
   }
 
-  function filterRoom(item) {
+  /**
+   * @function filterRoom
+   * @description Фильтрация объявлений по колличеству комнат
+   * @param {object} advert
+   * @return {boolean} если true - возвращает объявление соглано условия
+   */
+  function filterRoom(advert) {
     return advertRoom === 'any' ? true :
-      parseFloat(advertRoom) === item.offer.rooms;
+      parseFloat(advertRoom) === advert.offer.rooms;
   }
 
-  function filterGuest(item) {
+  /**
+   * @function filterGuest
+   * @description Фильтрация объявлений по колличеству гостей
+   * @param {object} advert
+   * @return {boolean} если true - возвращает объявление соглано условия
+   */
+  function filterGuest(advert) {
     return advertGuest === 'any' ? true :
-      parseFloat(advertGuest) === item.offer.guests;
+      parseFloat(advertGuest) === advert.offer.guests;
   }
 
-  function filterFeatures(item) {
+  /**
+   * @function filterFeatures
+   * @description Фильтрация объявлений по преимуществам
+   * @param {object} advert
+   * @return {boolean} если true - возвращает объявление соглано условия
+   */
+  function filterFeatures(advert) {
     return advertFeatures.every(function (feature) {
-      return item.offer.features.includes(feature);
+      return advert.offer.features.includes(feature);
     });
   }
 
