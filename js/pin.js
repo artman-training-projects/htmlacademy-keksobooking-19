@@ -4,12 +4,12 @@
 'use strict';
 
 (function () {
-  var Utils = window.utils;
-
   var Pins = {
     WIDTH: 50,
     HEIGHT: 70,
   };
+
+  var maxPins = 5;
 
   var map = document.querySelector('.map');
   var templatePin = document.querySelector('#pin').content.querySelector('.map__pin');
@@ -29,7 +29,7 @@
 
     advertPin.addEventListener('mousedown', onShowCardMousedown);
     function onShowCardMousedown(evt) {
-      if (evt.which === Utils.KeysClick.LEFT_MOUSE) {
+      if (evt.which === window.utils.KeysClick.LEFT_MOUSE) {
         var mapCard = map.querySelector('.map__card');
         if (mapCard) {
           mapCard.remove();
@@ -40,7 +40,7 @@
 
     advertPin.addEventListener('keydown', onShowCardKeydown);
     function onShowCardKeydown(evt) {
-      if (evt.key === Utils.KeysClick.ENTER) {
+      if (evt.key === window.utils.KeysClick.ENTER) {
         var mapCard = map.querySelector('.map__card');
         if (mapCard) {
           mapCard.remove();
@@ -55,14 +55,16 @@
   /** @function
    * @name renderPins
    * @description Вставляет пины в разметку
-   * @param {array} pin массив объявлений
+   * @param {array} pins массив объявлений
    */
-  function renderPins(pin) {
+  function renderPins(pins) {
     var fragment = document.createDocumentFragment();
 
-    pin.forEach(function (item) {
-      fragment.appendChild(makePin(item));
-    });
+    for (var i = 0; i < maxPins; i++) {
+      if (pins[i]) {
+        fragment.appendChild(makePin(pins[i]));
+      }
+    }
 
     map.querySelector('.map__pins').appendChild(fragment);
   }

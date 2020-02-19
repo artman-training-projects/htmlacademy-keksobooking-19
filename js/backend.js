@@ -13,6 +13,8 @@
     OK: 200
   };
 
+  var TIMEOUT = 10000;
+
   /** @function
    * @name dataLoad
    * @description Получение данных с сервера
@@ -20,7 +22,6 @@
    * @param {function} ifError callback при ошибке при получении данных
    */
   function dataLoad(ifSuccess, ifError) {
-    var TIMEOUT = 1000;
     var xhr = new XMLHttpRequest();
     xhr.responseType = 'json';
     xhr.timeout = TIMEOUT;
@@ -54,6 +55,7 @@
   function dataPush(data, ifSuccess) {
     var xhr = new XMLHttpRequest();
     xhr.responseType = 'json';
+    xhr.timeout = TIMEOUT;
 
     xhr.addEventListener('load', function () {
       ifSuccess(xhr.response);
@@ -75,9 +77,20 @@
     document.body.appendChild(error);
   }
 
+  /** @function
+   * @name onSuccess
+   * @description Действия при получении данных с сервера
+   * @param {*} data
+   */
+  function onSuccess(data) {
+    window.init.defaultAdverts = data;
+    window.pin.render(window.init.defaultAdverts);
+  }
+
   window.backend = {
     dataLoad: dataLoad,
     dataPush: dataPush,
-    error: onError
+    error: onError,
+    success: onSuccess
   };
 })();
