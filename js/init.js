@@ -103,6 +103,8 @@
           card.remove();
         });
 
+        window.upload.remove();
+
         mainPin.addEventListener('mousedown', onMapPinMousedown);
         mainPin.addEventListener('keydown', onMapPinKeydown);
         break;
