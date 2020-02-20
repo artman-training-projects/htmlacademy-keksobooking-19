@@ -4,16 +4,16 @@
 'use strict';
 
 (function () {
+  var TIMEOUT = 10000;
+
   var Url = {
     LOAD: 'https://js.dump.academy/keksobooking/data',
     PUSH: 'https://js.dump.academy/keksobooking'
   };
 
-  var statusHTML = {
+  var StatusHtml = {
     OK: 200
   };
-
-  var TIMEOUT = 10000;
 
   /** @function
    * @name dataLoad
@@ -27,7 +27,7 @@
     xhr.timeout = TIMEOUT;
 
     xhr.addEventListener('load', function () {
-      if (xhr.status === statusHTML.OK) {
+      if (xhr.status === StatusHtml.OK) {
         ifSuccess(xhr.response);
       } else {
         ifError('Cтатус ответа: ' + xhr.status + ' ' + xhr.statusText);
@@ -85,6 +85,7 @@
   function onSuccess(data) {
     window.init.defaultAdverts = data;
     window.pin.render(window.init.defaultAdverts);
+    window.filter.disabling(false);
   }
 
   window.backend = {

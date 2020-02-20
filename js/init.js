@@ -8,10 +8,10 @@
   var mainPin = map.querySelector('.map__pin--main');
   var adForm = document.querySelector('.ad-form');
   var adFormReset = adForm.querySelector('.ad-form__reset');
-  var filterForm = document.querySelector('.map__filters');
 
   var defaultAdverts = [];
-  pageDisabled(true);
+  pageDisabling(true);
+  window.filter.disabling(true);
 
   /* Обработчики событий */
   /** @function
@@ -21,7 +21,7 @@
    */
   function onMapPinMousedown(evt) {
     if (evt.which === window.utils.KeysClick.LEFT_MOUSE) {
-      pageDisabled(false);
+      pageDisabling(false);
       mapActivateListener();
     }
   }
@@ -33,7 +33,7 @@
    */
   function onMapPinKeydown(evt) {
     if (evt.key === window.utils.KeysClick.ENTER) {
-      pageDisabled(false);
+      pageDisabling(false);
       mapActivateListener();
     }
   }
@@ -45,9 +45,8 @@
    */
   function onStartStateMousedown(evt) {
     if (evt.which === window.utils.KeysClick.LEFT_MOUSE) {
-      pageDisabled(true);
+      pageDisabling(true);
       mapDisableListener();
-      filterForm.style.opacity = 0;
     }
   }
 
@@ -58,9 +57,8 @@
    */
   function onStartStateKeydown(evt) {
     if (evt.key === window.utils.KeysClick.ENTER) {
-      pageDisabled(true);
+      pageDisabling(true);
       mapDisableListener();
-      filterForm.style.opacity = 0;
     }
   }
 
@@ -86,11 +84,12 @@
    * @description Управляет состояние страницы - активна или нет
    * @param {boolean} state true - страница не активна, false - страница активна
    */
-  function pageDisabled(state) {
+  function pageDisabling(state) {
     switch (state) {
       case true:
         window.form.disabling(state);
         map.classList.add('map--faded');
+        mainPin.style = 'left: 570px; top: 375px;';
 
         var pins = map.querySelectorAll('.map__pin');
         pins.forEach(function (pin) {
@@ -103,8 +102,6 @@
         cards.forEach(function (card) {
           card.remove();
         });
-
-        window.filter.disabled(true);
 
         mainPin.addEventListener('mousedown', onMapPinMousedown);
         mainPin.addEventListener('keydown', onMapPinKeydown);
@@ -124,7 +121,7 @@
   }
 
   window.init = {
-    pageDisabled: pageDisabled,
+    pageDisabling: pageDisabling,
     defaultAdverts: defaultAdverts
   };
 })();

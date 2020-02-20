@@ -4,6 +4,13 @@
 'use strict';
 
 (function () {
+  var Type = {
+    palace: 'Дворец',
+    flat: 'Квартира',
+    house: 'Дом',
+    bungalo: 'Бунгало'
+  };
+
   var map = document.querySelector('.map');
   var templateCard = document.querySelector('#card').content.querySelector('.map__card');
 
@@ -14,13 +21,6 @@
    * @return {object} возвращает html-элемент, карточка
    */
   function makeCard(advert) {
-    var Type = {
-      palace: 'Дворец',
-      flat: 'Квартира',
-      house: 'Дом',
-      bungalo: 'Бунгало'
-    };
-
     var advertCard = templateCard.cloneNode(true);
     advertCard.querySelector('.popup__title').textContent = advert.offer.title;
     advertCard.querySelector('.popup__text--address').textContent = advert.offer.address;
@@ -82,6 +82,10 @@
 
     function removeCard() {
       advertCard.remove();
+      if (map.querySelector('.map__pin--active')) {
+        map.querySelector('.map__pin--active').classList.remove('map__pin--active');
+      }
+
       document.removeEventListener('keydown', onPopupCloseKeydown);
     }
 
@@ -94,6 +98,10 @@
    * @param {number} card массив объявлений
    */
   function renderCard(card) {
+    if (map.querySelector('.map__pin--active')) {
+      map.querySelector('.map__pin--active').classList.remove('map__pin--active');
+    }
+
     map.querySelector('.map__filters-container').before(makeCard(card));
   }
 

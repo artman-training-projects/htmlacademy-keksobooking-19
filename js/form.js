@@ -30,8 +30,8 @@
   var price = adForm.querySelector('#price');
   var typeSelect = adForm.querySelector('#type');
   var roomSelect = adForm.querySelector('#room_number');
-  var capSelect = adForm.querySelector('#capacity');
-  var capOptions = capSelect.querySelectorAll('option');
+  var capacitySelect = adForm.querySelector('#capacity');
+  var capacityOptions = capacitySelect.querySelectorAll('option');
 
   price.setAttribute('min', typeToPrice[typeSelect.value]);
   price.placeholder = typeToPrice[typeSelect.value];
@@ -40,11 +40,11 @@
   adFormAddress.setAttribute('value', StartAddress.centerX + ', ' + StartAddress.centerY);
 
   /** @function
-   * @name adFormDisabling
+   * @name adFormDisabled
    * @description откл/вкл формы
    * @param {boolean} state true - отключение формы, false - включение формы
    */
-  function adFormDisabling(state) {
+  function adFormDisabled(state) {
     switch (state) {
       case true:
         adForm.classList.add('ad-form--disabled');
@@ -65,9 +65,9 @@
           fieldset.removeAttribute('disabled');
         });
 
-        capOptions.forEach(function (option) {
+        capacityOptions.forEach(function (option) {
           if (option.value !== roomSelect.value) {
-            option.disabled = true;
+            option.disabling = true;
             option.selected = false;
           } else {
             option.selected = true;
@@ -141,15 +141,16 @@
   function checkRooms(evt) {
     var rooms = roomToCapaсity[evt.target.value];
 
-    capOptions.forEach(function (option) {
+    capacityOptions.forEach(function (option) {
       option.disabled = true;
       option.selected = false;
+      rooms.forEach(function (room) {
+        if ((parseFloat(option.value) === room)) {
+          option.disabled = false;
+          option.selected = true;
+        }
+      });
     });
-
-    rooms.forEach(function (room) {
-      capSelect.querySelector('option' + '[value="' + room + '"]').disabled = false;
-    });
-    capSelect.querySelector('option' + '[value="' + rooms[0] + '"]').selected = true;
   }
 
   /** @function
@@ -161,6 +162,7 @@
     window.backend.dataPush(new FormData(adForm), function (responce) {
       if (responce) {
         messageSuccess();
+        window.init.pageDisabling(true);
       } else {
         messageError();
       }
@@ -174,8 +176,6 @@
 
       document.addEventListener('mousedown', onMessageCloseMousedown);
       document.addEventListener('keydown', onMessageCloseKeydown);
-
-      window.filter.disabled(false);
     }
 
     function messageError() {
@@ -214,6 +214,6 @@
   }
 
   window.form = {
-    disabling: adFormDisabling
+    disabling: adFormDisabled
   };
 })();
