@@ -40,11 +40,11 @@
   adFormAddress.setAttribute('value', StartAddress.centerX + ', ' + StartAddress.centerY);
 
   /** @function
-   * @name adFormDisabled
+   * @name adFormDisabling
    * @description откл/вкл формы
    * @param {boolean} state true - отключение формы, false - включение формы
    */
-  function adFormDisabled(state) {
+  function adFormDisabling(state) {
     switch (state) {
       case true:
         adForm.classList.add('ad-form--disabled');
@@ -214,6 +214,6 @@
   }
 
   window.form = {
-    disabling: adFormDisabled
+    disabling: adFormDisabling
   };
 })();

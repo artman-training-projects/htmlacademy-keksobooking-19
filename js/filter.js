@@ -19,6 +19,8 @@
     }
   };
 
+  var filteredAdverts;
+
   var filterForm = document.querySelector('.map__filters');
   var filterSelects = filterForm.querySelectorAll('select');
   var housingType = filterForm.querySelector('#housing-type');
@@ -34,8 +36,6 @@
   var advertFeatures = Array.from(filterForm.querySelectorAll('input:checked')).map(function (advert) {
     return advert.value;
   });
-
-  var filteredAdverts;
 
   filterForm.addEventListener('change', onFilterChange);
 
@@ -61,7 +61,13 @@
       });
     }
 
-    filteredAdverts = filteredAdverts.filter(filteringType).filter(filteringPrice).filter(filteringRoom).filter(filteringGuest).filter(filteringFeatures);
+    filteredAdverts = filteredAdverts
+      .filter(filteringType)
+      .filter(filteringPrice)
+      .filter(filteringRoom)
+      .filter(filteringGuest)
+      .filter(filteringFeatures);
+
     window.debounce(updatePins);
   }
 
