@@ -72,9 +72,15 @@
    */
   function onError(message) {
     var error = document.createElement('div');
+    error.classList.add('error-message');
     error.textContent = message;
-    error.style = 'position: absolute; top: 0; left:0; right: 0; text-align: center; font-size: 30px; color: rgb(200, 200, 0); background-color: rgba(0, 0, 0, 0.6); ';
+    error.style = 'position: fixed; top: 0; left:0; right: 0; text-align: center; font-size: 30px; line-height: 50px; color: rgb(200, 200, 0); background-color: rgba(0, 0, 0, 0.8); ';
     document.body.appendChild(error);
+    setTimeout(removeError, 3000);
+
+    function removeError() {
+      error.remove();
+    }
   }
 
   /** @function

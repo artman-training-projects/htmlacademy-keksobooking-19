@@ -16,7 +16,7 @@
   avatarChoose.addEventListener('change', function () {
     var file = avatarChoose.files[0];
 
-    if (checkFiles(file)) {
+    if (checkFiles(file, window.backend.error)) {
       var reader = new FileReader();
 
       reader.addEventListener('load', function () {
@@ -30,14 +30,14 @@
   photosChoose.addEventListener('change', function () {
     var file = photosChoose.files[0];
 
-    if (checkFiles(file)) {
+    if (checkFiles(file, window.backend.error)) {
       var reader = new FileReader();
 
       reader.addEventListener('load', function () {
         photosPreview.style = 'display: flex; flex-wrap: wrap; width: 300px;';
         var photo = document.createElement('img');
         photo.classList.add('house-photo');
-        photo.style = 'width: 70px; height: 70px; margin-right: 5px';
+        photo.style = 'width: 70px; height: 70px; margin-right: 5px; margin-bottom: 5px';
         photo.src = reader.result;
         photosPreview.appendChild(photo);
       });
@@ -50,15 +50,17 @@
    * @function checkFiles
    * @description Проверяет соответствие файла
    * @param {object} file
-   * @return {boolean} возвращает истина/ложь
+   * @param {function} ifError callback при не совпадении расширения файла
+   * @return {boolean} возвращает файл при совпадении типа файла
    */
-  function checkFiles(file) {
+  function checkFiles(file, ifError) {
     var fileName = file.name.toLowerCase();
 
     var matches = FILE_TYPES.some(function (it) {
       return fileName.endsWith(it);
     });
-    return matches;
+
+    return matches ? matches : ifError('Выбранный файл не картинка');
   }
 
   /**
