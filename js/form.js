@@ -40,48 +40,47 @@
   adFormAddress.setAttribute('value', StartAddress.centerX + ', ' + StartAddress.centerY);
 
   /** @function
-   * @name adFormDisabling
-   * @description откл/вкл формы
-   * @param {boolean} state true - отключение формы, false - включение формы
+   * @name adFormDisabled
+   * @description Блокирует форму объявления
    */
-  function adFormDisabling(state) {
-    switch (state) {
-      case true:
-        adForm.classList.add('ad-form--disabled');
+  function adFormDisabled() {
+    adForm.classList.add('ad-form--disabled');
 
-        adFormFieldset.forEach(function (fieldset) {
-          fieldset.setAttribute('disabled', 'disabled');
-        });
+    adFormFieldset.forEach(function (fieldset) {
+      fieldset.setAttribute('disabled', 'disabled');
+    });
 
-        adForm.removeEventListener('change', onFormChange);
-        adFormAddress.setAttribute('value', StartAddress.centerX + ', ' + StartAddress.centerY);
-        adFormAddress.value = StartAddress.centerX + ', ' + StartAddress.centerY;
-        adForm.reset();
-        break;
-      case false:
-        adForm.classList.remove('ad-form--disabled');
+    adForm.removeEventListener('change', onFormChange);
+    adFormAddress.setAttribute('value', StartAddress.centerX + ', ' + StartAddress.centerY);
+    adFormAddress.value = StartAddress.centerX + ', ' + StartAddress.centerY;
+    adForm.reset();
+  }
 
-        adFormFieldset.forEach(function (fieldset) {
-          fieldset.removeAttribute('disabled');
-        });
+  /** @function
+   * @name adFormEnabled
+   * @description Активирует форму объявления
+   */
+  function adFormEnabled() {
+    adForm.classList.remove('ad-form--disabled');
 
-        capacityOptions.forEach(function (option) {
-          if (option.value !== roomSelect.value) {
-            option.disabling = true;
-            option.selected = false;
-          } else {
-            option.selected = true;
-          }
+    adFormFieldset.forEach(function (fieldset) {
+      fieldset.removeAttribute('disabled');
+    });
 
-        });
+    capacityOptions.forEach(function (option) {
+      if (option.value !== roomSelect.value) {
+        option.disabling = true;
+        option.selected = false;
+      } else {
+        option.selected = true;
+      }
+    });
 
-        adFormAddress.removeAttribute('disabled');
-        adForm.addEventListener('change', onFormChange);
-        adForm.addEventListener('submit', onFormSubmit);
-        adFormAddress.setAttribute('value', StartAddress.centerX + ', ' + StartAddress.pinY);
-        adFormAddress.value = StartAddress.centerX + ', ' + StartAddress.pinY;
-        break;
-    }
+    adFormAddress.removeAttribute('disabled');
+    adForm.addEventListener('change', onFormChange);
+    adForm.addEventListener('submit', onFormSubmit);
+    adFormAddress.setAttribute('value', StartAddress.centerX + ', ' + StartAddress.pinY);
+    adFormAddress.value = StartAddress.centerX + ', ' + StartAddress.pinY;
   }
 
   /** @function
@@ -214,6 +213,7 @@
   }
 
   window.form = {
-    disabling: adFormDisabling
+    disabled: adFormDisabled,
+    enabled: adFormEnabled
   };
 })();

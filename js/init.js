@@ -80,46 +80,56 @@
 
   /* Функции */
   /** @function
-   * @name isPageDisabled
-   * @description Управляет состояние страницы - активна или нет
-   * @param {boolean} state true - страница не активна, false - страница активна
+   * @name pageDisabling
+   * @description Управляет состояние страницы - блокирована или активна
+   * @param {boolean} state true - блокирует страницу, false - активирует страницу
+   * @return {function} функция блокировки/активации страницы
    */
   function pageDisabling(state) {
-    switch (state) {
-      case true:
-        window.form.disabling(state);
-        map.classList.add('map--faded');
-        mainPin.style = 'left: 570px; top: 375px;';
+    return state ? pageDisabled() : pageEnabled();
+  }
 
-        var pins = map.querySelectorAll('.map__pin');
-        pins.forEach(function (pin) {
-          if (!pin.classList.contains('map__pin--main')) {
-            pin.remove();
-          }
-        });
+  /** @function
+   * @name pageDisabled
+   * @description блокирует страницу
+   */
+  function pageDisabled() {
+    window.form.disabled();
+    map.classList.add('map--faded');
+    mainPin.style = 'left: 570px; top: 375px;';
 
-        var cards = map.querySelectorAll('.map__card');
-        cards.forEach(function (card) {
-          card.remove();
-        });
+    var pins = map.querySelectorAll('.map__pin');
+    pins.forEach(function (pin) {
+      if (!pin.classList.contains('map__pin--main')) {
+        pin.remove();
+      }
+    });
 
-        window.upload.remove();
+    var cards = map.querySelectorAll('.map__card');
+    cards.forEach(function (card) {
+      card.remove();
+    });
 
-        mainPin.addEventListener('mousedown', onMapPinMousedown);
-        mainPin.addEventListener('keydown', onMapPinKeydown);
-        break;
-      case false:
-        window.form.disabling(state);
+    window.upload.remove();
 
-        map.classList.remove('map--faded');
-        adForm.classList.remove('ad-form--disabled');
+    mainPin.addEventListener('mousedown', onMapPinMousedown);
+    mainPin.addEventListener('keydown', onMapPinKeydown);
+  }
 
-        window.backend.dataLoad(window.backend.success, window.backend.error);
+  /** @function
+   * @name pageDisabled
+   * @description активирует страницу
+   */
+  function pageEnabled() {
+    window.form.enabled();
 
-        mainPin.removeEventListener('mousedown', onMapPinMousedown);
-        mainPin.removeEventListener('keydown', onMapPinKeydown);
-        break;
-    }
+    map.classList.remove('map--faded');
+    adForm.classList.remove('ad-form--disabled');
+
+    window.backend.dataLoad(window.backend.success, window.backend.error);
+
+    mainPin.removeEventListener('mousedown', onMapPinMousedown);
+    mainPin.removeEventListener('keydown', onMapPinKeydown);
   }
 
   window.init = {
