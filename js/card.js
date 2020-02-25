@@ -70,17 +70,17 @@
     /* Обработчики событий */
     function onPopupCloseMousedown(evt) {
       if (evt.which === window.utils.KeysClick.LEFT_MOUSE) {
-        removeCard();
+        removeActiveCard();
       }
     }
 
     function onPopupCloseKeydown(evt) {
       if (evt.key === window.utils.KeysClick.ESCAPE) {
-        removeCard();
+        removeActiveCard();
       }
     }
 
-    function removeCard() {
+    function removeActiveCard() {
       advertCard.remove();
       if (map.querySelector('.map__pin--active')) {
         map.querySelector('.map__pin--active').classList.remove('map__pin--active');
@@ -105,7 +105,19 @@
     map.querySelector('.map__filters-container').before(makeCard(card));
   }
 
+  /** @function
+   * @name removeCard
+   * @description Удаляет карточки объявлений
+   */
+  function removeCard() {
+    var cards = map.querySelectorAll('.map__card');
+    cards.forEach(function (card) {
+      card.remove();
+    });
+  }
+
   window.card = {
-    render: renderCard
+    render: renderCard,
+    remove: removeCard
   };
 })();

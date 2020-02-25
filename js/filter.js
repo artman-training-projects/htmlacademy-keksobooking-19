@@ -131,26 +131,9 @@
    * @description Перерисовка пинов на карте, согласно фильтра
    */
   function updatePins() {
-    var card = document.querySelector('.map__card');
-    if (card) {
-      card.remove();
-    }
-
-    removeOldPins();
+    window.card.remove();
+    window.pin.remove();
     window.pin.render(filteredAdverts);
-  }
-
-  /**
-   * @function removeOldPins
-   * @description Удаляет старые пины
-   */
-  function removeOldPins() {
-    var oldPins = document.querySelectorAll('.map__pin');
-    oldPins.forEach(function (pin) {
-      if (!pin.classList.contains('map__pin--main')) {
-        pin.remove();
-      }
-    });
   }
 
   /**

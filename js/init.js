@@ -95,38 +95,27 @@
    */
   function pageDisabled() {
     window.form.disabled();
+    window.card.remove();
+    window.pin.remove();
+    window.upload.remove();
+
     map.classList.add('map--faded');
     mainPin.style = 'left: 570px; top: 375px;';
-
-    var pins = map.querySelectorAll('.map__pin');
-    pins.forEach(function (pin) {
-      if (!pin.classList.contains('map__pin--main')) {
-        pin.remove();
-      }
-    });
-
-    var cards = map.querySelectorAll('.map__card');
-    cards.forEach(function (card) {
-      card.remove();
-    });
-
-    window.upload.remove();
 
     mainPin.addEventListener('mousedown', onMapPinMousedown);
     mainPin.addEventListener('keydown', onMapPinKeydown);
   }
 
   /** @function
-   * @name pageDisabled
+   * @name pageEnabled
    * @description активирует страницу
    */
   function pageEnabled() {
     window.form.enabled();
+    window.backend.dataLoad(window.backend.success, window.backend.error);
 
     map.classList.remove('map--faded');
     adForm.classList.remove('ad-form--disabled');
-
-    window.backend.dataLoad(window.backend.success, window.backend.error);
 
     mainPin.removeEventListener('mousedown', onMapPinMousedown);
     mainPin.removeEventListener('keydown', onMapPinKeydown);

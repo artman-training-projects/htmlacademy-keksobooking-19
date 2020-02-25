@@ -76,7 +76,21 @@
     map.querySelector('.map__pins').appendChild(fragment);
   }
 
+  /**
+   * @function removePins
+   * @description Удаляет старые пины
+   */
+  function removePins() {
+    var oldPins = document.querySelectorAll('.map__pin');
+    oldPins.forEach(function (pin) {
+      if (!pin.classList.contains('map__pin--main')) {
+        pin.remove();
+      }
+    });
+  }
+
   window.pin = {
-    render: renderPins
+    render: renderPins,
+    remove: removePins
   };
 })();
