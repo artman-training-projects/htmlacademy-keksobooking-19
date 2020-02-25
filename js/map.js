@@ -86,9 +86,9 @@
       return min;
     } else if (current > max) {
       return max;
-    } else {
-      return current;
     }
+
+    return current;
   }
 
   window.map = {
