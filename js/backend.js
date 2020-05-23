@@ -7,8 +7,8 @@
   var TIMEOUT = 10000;
 
   var Url = {
-    LOAD: 'https://js.dump.academy/keksobooking/data',
-    PUSH: 'https://js.dump.academy/keksobooking'
+    LOAD: 'https://javascript.pages.academy/keksobooking/data',
+    PUSH: 'https://javascript.pages.academy/keksobooking'
   };
 
   var StatusHtml = {
