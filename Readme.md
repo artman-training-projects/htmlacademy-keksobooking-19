@@ -1,4 +1,4 @@
-# Личный проект «Кексобукинг»
+# Личный проект «Кексобукинг» [![Build Status](https://travis-ci.com/artman-training-projects/htmlacademy-keksobooking-19.svg?branch=master)](https://travis-ci.com/artman-training-projects/htmlacademy-keksobooking-19)
 
 * Студент: [Владимир Артюхов](https://up.htmlacademy.ru/javascript/19/user/1095935).
 * Наставник: [Антон Попов](https://htmlacademy.ru/profile/joker).
