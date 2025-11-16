@@ -4,7 +4,7 @@
   "private": true,
   "description": "Личный проект «Кексобукинг» от HTML Academy",
   "devDependencies": {
-    "eslint": "6.3.0",
+    "eslint": "9.39.1",
     "eslint-config-htmlacademy": "0.5.2"
   },
   "license": "MIT",
